@@ -1,0 +1,1 @@
+uruchomienie z konsoli modulu python: w folderze server odpalić konsole i wpisac komende venv\Scripts\activate.bat
