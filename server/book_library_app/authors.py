@@ -3,6 +3,7 @@ from book_library_app import app, db
 from webargs.flaskparser import use_args
 from flask import jsonify
 from book_library_app.models import Author, AuthorSchema, author_schema
+from book_library_app.utils import validate_json_content_type
 
 
 @app.route('/api/v1/authors', methods=['GET'])
@@ -31,8 +32,9 @@ def get_author(author_id: int):
     )
 
  
-@app.route('/api/v1/authors', methods=['POST'])
-@use_args(author_schema)
+@app.route('/api/v1/authors', methods=['POST']) # kolejnosc wywolywania dekoratorów jest istotna
+@validate_json_content_type
+@use_args(author_schema, error_status_code=400)
 def create_author(args: dict):
     author = Author(**args)
 
