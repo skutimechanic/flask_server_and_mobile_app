@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from book_library_app import app, authors, db
+from book_library_app import app, db
 from book_library_app.models import Author
 
 

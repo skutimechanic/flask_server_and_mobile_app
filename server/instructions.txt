@@ -8,6 +8,7 @@ w wirtualnym środowsiku zainstalować: pip install flask-sqlalchemy
 w wirtualnym środowsiku zainstalować: pip install pymysql
 w wirtualnym środowsiku zainstalować: pip install cryptography
 w wirtualnym środowsiku zainstalować: pip install flask-migrate
+w wirtualnym środowsiku zainstalować: pip install marshmallow
 
 odpalenie wirtualnego środowiska w vs code: https://stackoverflow.com/questions/54106071/how-can-i-set-up-a-virtual-environment-for-python-in-visual-studio-code
 
