@@ -1,7 +1,7 @@
 from dbm import dumb
 from book_library_app import app, db
 from webargs.flaskparser import use_args
-from flask import jsonify
+from flask import jsonify, request
 from book_library_app.models import Author, AuthorSchema, author_schema
 from book_library_app.utils import validate_json_content_type
 
@@ -9,7 +9,8 @@ from book_library_app.utils import validate_json_content_type
 @app.route('/api/v1/authors', methods=['GET'])
 def get_authors():
     authors = Author.query.all()
-    author_schema = AuthorSchema(many=True) # many=True informuje pakiet, ze przekazemy liste obiektow
+    schema_args = Author.get_schema_args(request.args.get('fields'))
+    author_schema = AuthorSchema(**schema_args)
 
     return jsonify(
         {
@@ -74,7 +75,7 @@ def delete_author(author_id: int):
 
     db.session.delete(author)
     db.session.commit()
-    
+
     return jsonify(
         {
             'success': True,
