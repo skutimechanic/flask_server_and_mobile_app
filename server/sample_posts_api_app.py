@@ -54,5 +54,30 @@ def items():
         return response
 
 
+@app.route('/posts/<int:post_id>') # przesylanie parametrow w pathie oraz konwersja na inta
+def item(post_id):
+    response_data = {
+        'success': True,
+        'data': []
+    }
+
+    # item = ''
+    # for post in POSTS:
+    #     if post['id'] == post_id:
+    #         item = post
+
+    # lub 
+
+    try:
+        item = [post for post in POSTS if post['id'] == post_id][0] # to nam zwroci liste, dlatego dodajemy  
+    except IndexError:
+        response_data['success'] = False
+        response_data['error'] = 'Not found'
+        response = jsonify(response_data)
+        response.status_code = 404
+    else:
+        response_data['data'] = item
+        response = jsonify(response_data)
+    return response
 if __name__ == '__main__':
     app.run(debug=True)
