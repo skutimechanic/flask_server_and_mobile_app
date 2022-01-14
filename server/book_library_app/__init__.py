@@ -13,3 +13,4 @@ migrate = Migrate(app, db) # dzieki temu mamy automatyczna migracje
 
 from book_library_app import authors # import ponizej tworzenia app - wazne
 from book_library_app import models
+from book_library_app import db_manage_commands
