@@ -1,0 +1,6 @@
+utworzenie wirtualnego środowiska: python -m venv venv
+
+uruchomienie z konsoli wirtualnego środowiska: w folderze server odpalić konsole i wpisac komende venv\Scripts\activate.bat
+
+w wirtualnym środowisku zainstalować flaska: pip install flask
+w wirtualnym środowsiku zainstalować: pip install python-dotenv
