@@ -21,7 +21,7 @@ def get_author(author_id: int):
         }
     )
 
-
+ 
 @app.route('/api/v1/authors', methods=['POST'])
 def create_author():
     return jsonify(
