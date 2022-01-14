@@ -10,3 +10,4 @@ db = SQLAlchemy(app)
 
 
 from book_library_app import authors # import ponizej tworzenia app - wazne
+from book_library_app import models
