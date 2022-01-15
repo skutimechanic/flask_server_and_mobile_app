@@ -16,3 +16,5 @@ odpalenie wirtualnego środowiska w vs code: https://stackoverflow.com/questions
 MySql Community Server: https://dev.mysql.com/downloads/windows/installer/8.0.html, pobrać większy plik, w instalatorze wybrac "Developer defualt"
 
 utworzenie repozytorium migrations: flask db init, a nastepnie tworzenie pliku migracyjnego: flask db migrate -m "authors table", nastepnie: flask db upgrade
+
+reczne uruchomienie servera mysql mozliwosc jest za pomoca cmd: services.msc, nastepnie z listy wybrac MySql80 i uruchom

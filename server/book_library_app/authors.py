@@ -11,15 +11,19 @@ def get_authors():
     query = Author.query
     schema_args = Author.get_schema_args(request.args.get('fields'))
     query = Author.apply_order(query, request.args.get('sort'))
-    query = Author.apply_filter(query, request.args)
-    authors = query.all()
-    author_schema = AuthorSchema(**schema_args)
+    query = Author.apply_filter(query)
+    items, pagination = Author.get_pagination(query)
+
+
+    authors = AuthorSchema(**schema_args).dump(items)
 
     return jsonify(
         {
             'success': True,
-            'data': author_schema.dump(authors), # wykona mappowanie na jsony
-            'number_of_records': len(authors)
+            # 'data': author_schema.dump(authors), # wykona mappowanie na jsony
+            'data': authors, # wykona mappowanie na jsony
+            'number_of_records': len(authors),
+            'pagination': pagination
         }
     )
 
