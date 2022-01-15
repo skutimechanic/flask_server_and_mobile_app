@@ -41,7 +41,11 @@ class Book(db.Model):
     author = db.relationship('Author', back_populates='books')
 
     def __repr__(self):
-        return f'{self.title} - {self.author.first_name} {self.author.last_name}'
+        return f'{self.title} - {self.author.first_name} {self.author.last_name}' 
+
+    @staticmethod
+    def additional_validation(param: str, value: str) -> str:
+        return value
 
 
 class AuthorSchema(Schema):
@@ -51,12 +55,30 @@ class AuthorSchema(Schema):
     first_name = fields.String(required=True, validate=validate.Length(max=50))
     last_name = fields.String(required=True, validate=validate.Length(max=50))
     birth_date = fields.Date('%d-%m-%Y', required=True)
+    books = fields.List(fields.Nested(lambda: BookSchema(exclude=['author'])))
 
     @validates('birth_date')  # sprawdzamy czy data nie jest rowna teraz
     def validate_birth_date(self, value):
         if value > datetime.now().date():
             raise ValidationError(
                 f'Birth date must be lower than {datetime.now().date()}')
+
+
+class BookSchema(Schema):
+    # id wykorzystywane tylko przy serializacji danych
+    id = fields.Integer(dump_only=True)
+    title = fields.String(required=True, validate=validate.Length(max=50))
+    isbn = fields.Integer(required=True)
+    number_of_pages = fields.Integer(required=True)
+    description = fields.String()
+    author_id = fields.Integer(load_only=True) # author id nie bedzie uzyte w przypadku metody dump()
+    author = fields.Nested(lambda: AuthorSchema(only=['id', 'first_name', 'last_name']))
+
+
+    @validates('isbn')
+    def validate_isbn(self, value):
+        if len(str(value)) != 13:
+            ValidationError('ISBN must contains 13 digits')
 
 
 author_schema = AuthorSchema()
