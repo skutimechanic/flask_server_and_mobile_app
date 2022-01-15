@@ -44,9 +44,9 @@ def remove_data():
     """Remove all data from the database"""
     try:
         # db.session.execute('TRUNCATE TABLE authors') # usuniecie wszystkiego z tabeli oraz resetacja klucza glownego, to nie wykona sie popranie jesli mamy klucz obcy
-        db.session.execute('DELETE TABLE books')
+        db.session.execute('DELETE FROM books')
         db.session.execute('ALTER TABLE books AUTO_INCREMENT = 1') # restacja klucz glownego
-        db.session.execute('DELETE TABLE authors')
+        db.session.execute('DELETE FROM authors')
         db.session.execute('ALTER TABLE authors AUTO_INCREMENT = 1') # restacja klucz glownego
         db.session.commit()
         print('Data has been successfully removed to database')
