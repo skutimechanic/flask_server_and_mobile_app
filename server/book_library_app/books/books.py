@@ -1,9 +1,9 @@
 from book_library_app import db
 from book_library_app.books import books_bp
-from book_library_app.models import Book, BookSchema, book_schema
+from book_library_app.models import Book, BookSchema, book_schema, Author
 from book_library_app.utils import (apply_filter, apply_order, get_schema_args,
                                     validate_json_content_type, get_pagination)
-from flask import jsonify
+from flask import jsonify, abort
 from webargs.flaskparser import use_args
 
 
@@ -32,6 +32,35 @@ def get_books():
 def get_book(book_id: int):
     book = Book.query.get_or_404(book_id, description=f'Book with id {book_id} not found')
 
+    return jsonify(
+        {
+            'success': True,
+            'data': book_schema.dump(book)
+        }
+    )
+
+
+@books_bp.route('/books/<int:book_id>', methods=['PUT'])
+@validate_json_content_type
+@use_args(book_schema, error_status_code=400)
+def update_book(args: dict, book_id: int):
+    book = Book.query.get_or_404(book_id, description=f'Book with id {book_id} not found')
+    # need better handling this case, check if id is the same 
+    # if Book.query.filter(Book.isbn == args['isbn']).first():
+    #     abort(409, description=f'Book with ISBN {args["isbn"]} already exists')
+
+    book.title = args['title']
+    book.isbn = args['isbn']
+    book.number_of_pages = args['number_of_pages']
+    description = args.get('description')
+    if description is not None:
+        book.description = description
+    author_id = args.get('author_id')
+    if author_id is not None:
+        Author.query.get_or_404(author_id, description=f'Author with id {author_id} not found')
+        book.author_id = author_id
+
+    db.session.commit()
     return jsonify(
         {
             'success': True,
