@@ -1,9 +1,14 @@
-from posixpath import split
+import re
 from flask_sqlalchemy import BaseQuery
+from sqlalchemy.orm.attributes import InstrumentedAttribute
+from sqlalchemy.sql.expression import BinaryExpression
 from book_library_app import db
 from datetime import datetime
 from marshmallow import Schema, fields, validate, ValidationError, validates
 from werkzeug.datastructures import ImmutableDict
+
+
+COMPARISON_OPERATORS_RE = re.compile(r'(.*)\[(gte|gt|lte|lt)\]')
 
 
 class Author(db.Model):
@@ -38,9 +43,24 @@ class Author(db.Model):
         return query
 
     @staticmethod
+    def get_filter_argument(column_name: InstrumentedAttribute, value: str, operator: str) -> BinaryExpression:
+        operator_mapping = {
+            '==': column_name == value,
+            'gte': column_name >= value,
+            'gt': column_name > value,
+            'lte': column_name <= value,
+            'lt': column_name < value
+        }
+        return operator_mapping[operator]
+
+    @staticmethod
     def apply_filter(query: BaseQuery, params: ImmutableDict) -> BaseQuery:
         for param, value in params.items():
             if param not in {'fields', 'sort'}:
+                operator = '=='
+                match = COMPARISON_OPERATORS_RE.match(param)
+                if match is not None:
+                    param, operator = match.groups()
                 column_attr = getattr(Author, param, None)
                 if column_attr is not None:
                     if param == 'birth_date':
@@ -48,9 +68,11 @@ class Author(db.Model):
                             value = datetime.strptime(value, '%d-%m-%Y').date()
                         except ValueError:
                             continue
-                    query = query.filter(column_attr == value)
+                    filter_argument = Author.get_filter_argument(column_attr, value, operator)
+                    query = query.filter(filter_argument)
 
         return query
+
 
 
 
