@@ -1,6 +1,9 @@
-from datetime import date, datetime
+import jwt
+from datetime import date, datetime, timedelta
+from flask import current_app
 
 from marshmallow import Schema, ValidationError, fields, validate, validates
+from werkzeug.security import generate_password_hash
 
 from book_library_app import db
 
@@ -54,6 +57,18 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    @staticmethod
+    def generate_hashed_password(password: str) -> str:
+        return generate_password_hash(password)
+
+    def generate_jwt(self) -> str:
+        payload = {
+            'user_id': self.id,
+            'exp': datetime.utcnow() + timedelta(minutes=current_app.config.get('JWT_EXPIRED_MINUTES', 30)) # ustawienie czasu po jakim token przestaje działać
+        }
+
+        return jwt.encode(payload, current_app.config.get('SECRET_KEY'))
 
 
 class AuthorSchema(Schema):
