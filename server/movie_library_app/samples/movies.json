@@ -1,0 +1,56 @@
+[{
+        "title": "Transformers",
+        "description": "Wojna pomiędzy dwoma rasami robotów – Autobotami i Decepticonami przenosi się na Ziemię. W samym środku walki znajdzie się nastolatek Sam Witwicky.",
+        "image_link": "https://fwcdn.pl/fpo/12/20/181220/7168147.3.jpg",
+        "rating_sum": 63,
+        "number_of_votes": 10,
+        "category": "Akcja",
+        "director": "Michael Bay",
+        "year": 2007,
+        "country": "USA"
+    },
+    {
+        "title": "Incepcja",
+        "description": "Czasy, gdy technologia pozwala na wchodzenie w świat snów. Złodziej Cobb ma za zadanie wszczepić myśl do śpiącego umysłu.",
+        "image_link": "https://i1.fdbimg.pl/x1/3rn43l/1041x1500_lajbib.jpg",
+        "rating_sum": 79,
+        "number_of_votes": 10,
+        "category": "Thriller",
+        "director": "Christopher Nolan",
+        "year": 2010,
+        "country": "USA"
+    },
+    {
+        "title": "Venom",
+        "description": "Kiedy Eddie Brock zdobywa moce symbionta, zmuszony jest uwolnić swoje alter-ego \"Venoma\", by ratować własne życie.",
+        "image_link": "https://m.media-amazon.com/images/I/5104DBeCJRL._AC_SY780_.jpg",
+        "rating_sum": 72,
+        "number_of_votes": 10,
+        "category": "Akcja",
+        "director": "Ruben Fleischer",
+        "year": 2018,
+        "country": "Chiny"
+    },
+    {
+        "title": "Furioza",
+        "description": "Historia policjantki, która spróbuje rozbić układ, w którym się wychowała.",
+        "image_link": "https://fwcdn.pl/fpo/38/10/833810/7972235.3.jpg",
+        "rating_sum": 77,
+        "number_of_votes": 10,
+        "category": "Dramat",
+        "director": "Cyprian T. Olencki",
+        "year": 2021,
+        "country": "Polska"
+    },
+    {
+        "title": "Parasite",
+        "description": "Kiedy Ki-woo dostaje pracę jako korepetytor córki zamożnego małżeństwa, wymyśla sposób na zapewnienie zatrudnienia również reszcie swojej rodziny.",
+        "image_link": "https://fwcdn.pl/fpo/81/43/798143/7922316.6.jpg",
+        "rating_sum": 81,
+        "number_of_votes": 10,
+        "category": "Dramat",
+        "director": "Joon-ho Bong",
+        "year": 2019,
+        "country": "Korea Południowa"
+    }
+]

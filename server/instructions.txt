@@ -22,8 +22,12 @@ jesli juz repozytorium istnieje to flask db migrate -m "books table", nastepnie:
 reczne uruchomienie servera mysql mozliwosc jest za pomoca cmd: services.msc, nastepnie z listy wybrac MySql80 i uruchom
 
 
-w MySql 8.0 Command Line Client: create database movie library 
+w MySql 8.0 Command Line Client: "create database movie_library"
 
 dodać plik .env w folderze server o zawartości:
 SECRET_KEY=SomeRandomString
 SQLALCHEMY_DATABASE_URI=mysql+pymysql://bookapi:book1234@localhost/movie_library?charset=utf8mb4
+
+w folderze server, aby utworzyć tabele i nastepnie wypelnic je danymi:
+    flask db upgrade
+    flask db-manage add-data
