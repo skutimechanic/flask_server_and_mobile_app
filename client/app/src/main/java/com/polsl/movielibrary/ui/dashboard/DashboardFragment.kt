@@ -5,15 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import com.polsl.movielibrary.R
 import com.polsl.movielibrary.databinding.FragmentDashboardBinding
+import com.polsl.movielibrary.ui.base.BaseFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment<DashboardViewModel>() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    override val viewModel: DashboardViewModel by viewModel()
     private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
@@ -25,16 +23,17 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+        viewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
-        })
+        }
+        binding.buttonGetMovies.setOnClickListener {
+            viewModel.loadMovies()
+        }
+
         return root
     }
 
