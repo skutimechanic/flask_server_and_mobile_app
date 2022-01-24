@@ -30,7 +30,7 @@ class DashboardViewModel(
                 val result = repositoryInvoker.flowData { repository.getAllMovies() }
 
                 if (result is Resource.Success) {
-                    Log.e("Movies", "${result.value}")
+                    Log.d("Movies", result.value.toString())
                 } else {
                     handleError(result)
                 }
