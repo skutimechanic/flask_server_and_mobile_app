@@ -1,4 +1,9 @@
+import jwt
+from datetime import datetime, timedelta
+from flask import current_app
+
 from marshmallow import Schema, fields, validate
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from movie_library_app import db
 
@@ -20,6 +25,30 @@ class Movie(db.Model):
         return f'{self.title} - {self.description}'
 
 
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(255), nullable=False, unique=True, index=True)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
+    creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    @staticmethod
+    def generate_hashed_password(password: str) -> str:
+        return generate_password_hash(password)
+
+    def generate_jwt(self) -> str:
+        payload = {
+            'user_id': self.id,
+            'exp': datetime.utcnow() + timedelta(minutes=current_app.config.get('JWT_EXPIRED_MINUTES', 30))
+        }
+
+        return jwt.encode(payload, current_app.config.get('SECRET_KEY'))
+    
+    def is_password_valid(self, password) -> bool:
+        return check_password_hash(self.password, password)
+
+
 class MovieSchema(Schema):
     id = fields.Integer(dump_only=True)
     title = fields.String(required=True, validate=validate.Length(max=50))
@@ -36,4 +65,19 @@ class MovieSchema(Schema):
     description = fields.String()
 
 
+class UserSchema(Schema):
+    id = fields.Integer(dump_only=True)
+    username = fields.String(required=True, validate=validate.Length(max=255))
+    email = fields.Email(required=True)
+    password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
+    creation_date = fields.DateTime(dump_only=True)
+
+
+class UserPasswordUpdateSchema(Schema):
+    current_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
+    new_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
+
+
 movie_schema = MovieSchema()
+user_schema = UserSchema()
+user_password_update_schema = UserPasswordUpdateSchema()
