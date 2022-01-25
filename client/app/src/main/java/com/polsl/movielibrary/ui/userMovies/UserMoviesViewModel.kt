@@ -10,6 +10,7 @@ import com.polsl.movielibrary.repositories.AuthRepository
 import com.polsl.movielibrary.repositories.MoviesRepository
 import com.polsl.movielibrary.ui.base.BaseViewModel
 import com.polsl.movielibrary.utils.UserSession
+import com.polsl.movielibrary.utils.isActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -48,7 +49,7 @@ class UserMoviesViewModel(
 
     fun isUserLoggedIn() {
         val token = userSession.getToken()
-        _isLoggedIn.postValue(token != null)
+        _isLoggedIn.postValue(token != null && token.isActive())
     }
 
     fun getUserInfo() {

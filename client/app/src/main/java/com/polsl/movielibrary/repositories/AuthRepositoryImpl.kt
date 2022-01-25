@@ -5,6 +5,7 @@ import com.polsl.movielibrary.api.models.LoginInputApiModel
 import com.polsl.movielibrary.api.services.AuthService
 import com.polsl.movielibrary.recource.Resource
 import com.polsl.movielibrary.utils.UserSession
+import com.polsl.movielibrary.utils.isActive
 
 class AuthRepositoryImpl(private val authService: AuthService, private val userSession: UserSession) : AuthRepository {
 
@@ -32,7 +33,7 @@ class AuthRepositoryImpl(private val authService: AuthService, private val userS
 
     override suspend fun getCurrentUserInfo(): Resource<LoggedUserInfoApiModel> {
         val token = userSession.getToken()
-        if (token != null) {
+        if (token != null && token.isActive()) {
             val response = authService.getLoggedUserInfo(token = "Bearer $token")
             return if (response.isSuccessful) {
                 response.body().let {
