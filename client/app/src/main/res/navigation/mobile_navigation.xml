@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_all_movies">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.polsl.movielibrary.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_all_movies"
+        android:name="com.polsl.movielibrary.ui.allMovies.AllMoviesFragment"
+        android:label="@string/title_all_movies"
+        tools:layout="@layout/fragment_all_movies" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.polsl.movielibrary.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        android:id="@+id/navigation_user_movies"
+        android:name="com.polsl.movielibrary.ui.userMovies.UserMoviesFragment"
+        android:label="@string/title_user_movies"
+        tools:layout="@layout/fragment_user_movies" >
         <action
-            android:id="@+id/action_navigation_dashboard_to_navigation_login"
+            android:id="@+id/action_navigation_user_movies_to_navigation_login"
             app:destination="@id/navigation_login" />
     </fragment>
 

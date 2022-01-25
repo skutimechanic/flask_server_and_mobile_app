@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MovieLibrary</string>
-    <string name="title_home">Filmy</string>
-    <string name="title_dashboard">Moje filmy</string>
+    <string name="title_all_movies">Filmy</string>
+    <string name="title_user_movies">Moje filmy</string>
     <string name="title_settings">Ustawienia</string>
     <string name="title_login">Logowanie</string>
     <string name="password">Hasło</string>

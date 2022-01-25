@@ -1,4 +1,4 @@
-package com.polsl.movielibrary.ui.dashboard
+package com.polsl.movielibrary.ui.userMovies
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -14,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DashboardViewModel(
+class UserMoviesViewModel(
         private val repository: MoviesRepository,
         private val authRepository: AuthRepository,
         private val repositoryInvoker: RepositoryInvoker,

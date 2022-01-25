@@ -1,4 +1,4 @@
-package com.polsl.movielibrary.ui.home
+package com.polsl.movielibrary.ui.allMovies
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomeViewModel(
+class AllMoviesViewModel(
         private val repository: MoviesRepository,
         private val repositoryInvoker: RepositoryInvoker,
 ) : BaseViewModel() {

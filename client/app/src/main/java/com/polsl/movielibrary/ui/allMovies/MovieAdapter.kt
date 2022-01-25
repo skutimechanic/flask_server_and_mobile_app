@@ -1,4 +1,4 @@
-package com.polsl.movielibrary.ui.home
+package com.polsl.movielibrary.ui.allMovies
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

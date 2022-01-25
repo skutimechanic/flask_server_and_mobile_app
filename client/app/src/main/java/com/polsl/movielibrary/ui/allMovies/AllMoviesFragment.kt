@@ -1,4 +1,4 @@
-package com.polsl.movielibrary.ui.home
+package com.polsl.movielibrary.ui.allMovies
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +8,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.api.models.MovieApiModel
-import com.polsl.movielibrary.databinding.FragmentHomeBinding
+import com.polsl.movielibrary.databinding.FragmentAllMoviesBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HomeFragment : BaseFragment<HomeViewModel>() {
+class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
 
-    override val viewModel: HomeViewModel by viewModel()
-    private var _binding: FragmentHomeBinding? = null
+    override val viewModel: AllMoviesViewModel by viewModel()
+    private var _binding: FragmentAllMoviesBinding? = null
     var adapter: MovieAdapter? = null
 
     // This property is only valid between onCreateView and
@@ -27,7 +27,7 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
         viewModel.movies.observe(viewLifecycleOwner, Observer {
             setMoviesList(it)
         })

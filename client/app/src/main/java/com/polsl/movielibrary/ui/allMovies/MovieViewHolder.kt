@@ -1,4 +1,4 @@
-package com.polsl.movielibrary.ui.home
+package com.polsl.movielibrary.ui.allMovies
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
