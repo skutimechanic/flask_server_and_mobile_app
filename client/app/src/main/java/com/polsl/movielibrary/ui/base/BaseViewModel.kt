@@ -30,5 +30,4 @@ abstract class BaseViewModel : ViewModel() {
             is Resource.NoInternetConnection -> _noInternet.postValue(result.message)
         }
     }
-
 }

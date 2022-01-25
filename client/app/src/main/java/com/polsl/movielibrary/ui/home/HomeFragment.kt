@@ -44,7 +44,7 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
     }
 
     private fun setMoviesList(movies: List<MovieApiModel>) {
-        with(_binding!!.moviesListRecyclerView) {
+        with(binding.moviesListRecyclerView) {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = MovieAdapter().apply {
                 setItems(movies)

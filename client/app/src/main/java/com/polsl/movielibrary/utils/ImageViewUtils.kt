@@ -17,7 +17,6 @@ fun ImageView.setImageFromUrl(imageUrl: String) {
             }
 }
 
-
 private fun getBitmapDrawableFromUrl(imageUrl: String): Observable<Bitmap?> {
     return Observable.create { subscriber ->
         val url = URL(imageUrl)

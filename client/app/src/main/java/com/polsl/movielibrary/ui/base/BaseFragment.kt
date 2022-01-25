@@ -28,5 +28,4 @@ abstract class BaseFragment<T: BaseViewModel> : Fragment() {
             ).show()
         }
     }
-
 }

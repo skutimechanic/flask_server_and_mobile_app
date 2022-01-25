@@ -13,5 +13,4 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             it.movie = model
         }
     }
-
 }
