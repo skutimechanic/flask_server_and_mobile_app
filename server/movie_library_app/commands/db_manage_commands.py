@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from movie_library_app import db
-from movie_library_app.models import Movie
+from movie_library_app.models import Movie, UserMovie
 from movie_library_app.commands import db_manage_bp
 
 
@@ -24,8 +24,13 @@ def add_data():
     try:
         data_json = load_json_data('movies.json')
         for item in data_json:
-            movie = Movie(**item) # ** rozpakowanie słownika
+            movie = Movie(**item)
             db.session.add(movie)
+
+        data_json = load_json_data('usermovies.json')
+        for item in data_json:
+            user_movie = UserMovie(**item)
+            db.session.add(user_movie)
         db.session.commit()
         print('Data has been successfully added to database')
     except Exception as exc:
@@ -38,6 +43,8 @@ def remove_data():
     try:
         db.session.execute('DELETE FROM movies')
         db.session.execute('ALTER TABLE movies AUTO_INCREMENT = 1')
+        db.session.execute('DELETE FROM user_movies')
+        db.session.execute('ALTER TABLE user_movies AUTO_INCREMENT = 1')
         db.session.commit()
         print('Data has been successfully removed to database')
     except Exception as exc:

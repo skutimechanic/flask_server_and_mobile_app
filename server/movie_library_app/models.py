@@ -49,6 +49,14 @@ class User(db.Model):
         return check_password_hash(self.password, password)
 
 
+class UserMovie(db.Model):
+    __tablename__ = 'user_movies'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    movie_id = db.Column(db.Integer, nullable=False)
+    rate = db.Column(db.Integer)
+
+
 class MovieSchema(Schema):
     id = fields.Integer(dump_only=True)
     title = fields.String(required=True, validate=validate.Length(max=50))
@@ -76,6 +84,12 @@ class UserSchema(Schema):
 class UserPasswordUpdateSchema(Schema):
     current_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
     new_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
+
+
+class UserMovieSchema(Schema):
+    user_id = fields.Integer(dump_only=True, required=True)
+    movie_id = fields.Integer(dump_only=True, required=True)
+    rate = fields.Integer()
 
 
 movie_schema = MovieSchema()
