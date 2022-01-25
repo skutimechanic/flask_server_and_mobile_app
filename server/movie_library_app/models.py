@@ -1,9 +1,10 @@
-import jwt
 from datetime import datetime, timedelta
-from flask import current_app
 
+import jwt
+from flask import current_app
 from marshmallow import Schema, fields, validate
-from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy import null
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from movie_library_app import db
 
@@ -24,11 +25,19 @@ class Movie(db.Model):
     def __repr__(self):
         return f'{self.title} - {self.description}'
 
+    def handle_rating(self, rate, old_rate=None) -> int:
+        if old_rate is None or old_rate is null:
+            return (self.rating_sum*self.number_of_votes+rate)//(self.number_of_votes+1)
+        else:
+            rating = self.rating_sum*self.number_of_votes-old_rate
+            return (rating+rate)//(self.number_of_votes)
+
 
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), nullable=False, unique=True, index=True)
+    username = db.Column(db.String(255), nullable=False,
+                         unique=True, index=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow)
@@ -44,7 +53,7 @@ class User(db.Model):
         }
 
         return jwt.encode(payload, current_app.config.get('SECRET_KEY'))
-    
+
     def is_password_valid(self, password) -> bool:
         return check_password_hash(self.password, password)
 
@@ -77,18 +86,21 @@ class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True, validate=validate.Length(max=255))
     email = fields.Email(required=True)
-    password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
+    password = fields.String(
+        required=True, load_only=True, validate=validate.Length(min=6, max=255))
     creation_date = fields.DateTime(dump_only=True)
 
 
 class UserPasswordUpdateSchema(Schema):
-    current_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
-    new_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
+    current_password = fields.String(
+        required=True, load_only=True, validate=validate.Length(min=6, max=255))
+    new_password = fields.String(
+        required=True, load_only=True, validate=validate.Length(min=6, max=255))
 
 
 class UserMovieSchema(Schema):
-    user_id = fields.Integer(dump_only=True, required=True)
-    movie_id = fields.Integer(dump_only=True, required=True)
+    user_id = fields.Integer(required=True)
+    movie_id = fields.Integer(required=True)
     rate = fields.Integer()
 
 

@@ -1,8 +1,12 @@
-from movie_library_app import db
-from movie_library_app.movies import movies_bp
-from movie_library_app.models import Movie, MovieSchema, UserMovie, movie_schema
-from movie_library_app.utils import (apply_filter, apply_order, get_schema_args, token_required, abort)
 from flask import jsonify
+from movie_library_app import db
+from movie_library_app.models import (Movie, MovieSchema, UserMovie,
+                                      UserMovieSchema, movie_schema)
+from movie_library_app.movies import movies_bp
+from movie_library_app.utils import (abort, apply_filter, apply_order,
+                                     get_schema_args, token_required,
+                                     validate_json_content_type)
+from webargs.flaskparser import use_args
 
 
 @movies_bp.route('/movies', methods=['GET'])
@@ -11,7 +15,6 @@ def get_movies():
     schema_args = get_schema_args(Movie)
     query = apply_order(Movie, query)
     query = apply_filter(Movie, query)
-
 
     movies = MovieSchema(**schema_args).dump(query.all())
 
@@ -26,7 +29,8 @@ def get_movies():
 
 @movies_bp.route('/movies/<int:movie_id>', methods=['GET'])
 def get_book(movie_id: int):
-    movie = Movie.query.get_or_404(movie_id, description=f'Movie with id {movie_id} not found')
+    movie = Movie.query.get_or_404(
+        movie_id, description=f'Movie with id {movie_id} not found')
 
     return jsonify(
         {
@@ -49,7 +53,7 @@ def get_user_movies(user_id: int):
         movie = Movie.query.filter(Movie.id == item.movie_id).first()
         if movie is None:
             abort(409, description=f'Movie with id {item.movie_id} not found')
-        
+
         movies.append(movie)
 
     movies = MovieSchema(many=True).dump(movies)
@@ -58,5 +62,62 @@ def get_user_movies(user_id: int):
         {
             'success': True,
             'data': movies
+        }
+    )
+
+
+@movies_bp.route('/user/movies', methods=['POST'])
+@token_required
+@validate_json_content_type
+@use_args(UserMovieSchema(exclude=['user_id']), error_status_code=400)
+def set_movie_rate(user_id: int, args: dict):
+    user_movie = UserMovie(user_id=user_id, **args)
+
+    movie = Movie.query.filter(Movie.id == user_movie.movie_id).first()
+    if movie is None:
+        abort(
+            409, description=f'Movie with id {user_movie.movie_id} not found')
+
+    new_rating = movie.handle_rating(user_movie.rate)
+
+    movie.rating_sum = new_rating
+    movie.number_of_votes += 1
+    db.session.add(user_movie)
+    db.session.commit()
+
+    return jsonify(
+        {
+            'success': True,
+            'data': new_rating
+        }
+    )
+
+
+@movies_bp.route('/user/movies', methods=['PUT'])
+@token_required
+@validate_json_content_type
+@use_args(UserMovieSchema(exclude=['user_id']), error_status_code=400)
+def update_movie_rate(user_id: int, args: dict):
+    user_movie = UserMovie.query.filter(UserMovie.user_id == user_id).filter(
+        UserMovie.movie_id == args['movie_id']).first()
+
+    if user_movie is None:
+        abort(409, description=f'Movies for user with {user_id} not found')
+
+    movie = Movie.query.filter(Movie.id == user_movie.movie_id).first()
+    if movie is None:
+        abort(
+            409, description=f'Movie with id {user_movie.movie_id} not found')
+
+    new_rating = movie.handle_rating(args['rate'], user_movie.rate)
+
+    movie.rating_sum = new_rating
+    user_movie.rate = args['rate']
+    db.session.commit()
+
+    return jsonify(
+        {
+            'success': True,
+            'data': new_rating
         }
     )
