@@ -37,12 +37,17 @@ class DashboardFragment : BaseFragment<DashboardViewModel>() {
 
         viewModel.isLoggedIn.observe(viewLifecycleOwner) {
             if (it) {
-                binding.userLoggedInLayout.visibility = View.VISIBLE
-                binding.userNotLoggedInLayout.visibility = View.INVISIBLE
+                viewModel.getUserInfo()
             } else {
                 binding.userLoggedInLayout.visibility = View.INVISIBLE
                 binding.userNotLoggedInLayout.visibility = View.VISIBLE
             }
+        }
+
+        viewModel.userInfo.observe(viewLifecycleOwner) {
+            binding.userLoggedInLayout.visibility = View.VISIBLE
+            binding.userNotLoggedInLayout.visibility = View.INVISIBLE
+            binding.userLoggedInText.text = getString(R.string.user_logged_in_text, it)
         }
 
         return root

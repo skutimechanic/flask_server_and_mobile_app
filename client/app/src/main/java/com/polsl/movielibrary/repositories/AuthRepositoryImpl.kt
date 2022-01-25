@@ -1,5 +1,6 @@
 package com.polsl.movielibrary.repositories
 
+import com.polsl.movielibrary.api.models.LoggedUserInfoApiModel
 import com.polsl.movielibrary.api.models.LoginInputApiModel
 import com.polsl.movielibrary.api.services.AuthService
 import com.polsl.movielibrary.recource.Resource
@@ -23,5 +24,27 @@ class AuthRepositoryImpl(private val authService: AuthService, private val userS
                         .Failure(errorMessage = "Error")
             }
         }
+    }
+
+    override suspend fun logout() {
+        userSession.deleteToken()
+    }
+
+    override suspend fun getCurrentUserInfo(): Resource<LoggedUserInfoApiModel> {
+        val token = userSession.getToken()
+        if (token != null) {
+            val response = authService.getLoggedUserInfo(token = "Bearer $token")
+            return if (response.isSuccessful) {
+                response.body().let {
+                    if (it != null)
+                        Resource.Success(it.user)
+                    else
+                        Resource.Failure(errorMessage = "Error retrieving user info")
+                }
+            } else {
+                Resource.Failure(errorMessage = "Error retrieving user info")
+            }
+        }
+        return Resource.Failure(errorMessage = "No user logged in")
     }
 }

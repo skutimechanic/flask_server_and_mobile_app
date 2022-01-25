@@ -19,25 +19,17 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_login"
             app:destination="@id/navigation_login" />
-        <argument
-            android:name="isLoggedIn"
-            app:argType="boolean"
-            android:defaultValue="false" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.polsl.movielibrary.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_settings"
+        android:name="com.polsl.movielibrary.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_login"
         android:name="com.polsl.movielibrary.ui.login.LoginFragment"
         android:label="@string/title_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_navigation_login_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
-    </fragment>
+        tools:layout="@layout/fragment_login" />
 </navigation>

@@ -7,6 +7,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 val networkModule = module {
     single { provideRetrofit() }
     single<MoviesService> { provideService(get()) }
@@ -15,10 +16,10 @@ val networkModule = module {
 
 private fun provideRetrofit(): Retrofit {
     return Retrofit.Builder()
-        .baseUrl(BuildConfig.SERVER_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+            .baseUrl(BuildConfig.SERVER_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 }
 
 private inline fun <reified T> provideService(retrofit: Retrofit): T =
-    retrofit.create(T::class.java)
+        retrofit.create(T::class.java)
