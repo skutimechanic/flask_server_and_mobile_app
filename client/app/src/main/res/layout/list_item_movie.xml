@@ -16,16 +16,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginVertical="10dp"
+            android:background="@color/itemBackground">
 
             <ImageView
                 android:id="@+id/movie_image"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_width="80dp"
+                android:layout_height="100dp"
                 android:adjustViewBounds="true"
                 android:padding="2dp"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:setImageBackground="@{movie.image_link}" />
@@ -34,13 +35,79 @@
                 android:id="@+id/movie_title"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="@{movie.title}"
-                android:textSize="20sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/movie_image"
+                app:layout_constraintEnd_toStartOf="@id/movie_year"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/movie_year"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/movie_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:setNumberString="@{movie.year}" />
+
+            <TextView
+                android:id="@+id/movie_type_label"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="@string/type_label"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@id/movie_image"
+                app:layout_constraintTop_toBottomOf="@+id/movie_title" />
+
+            <TextView
+                android:id="@+id/movie_type"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="@{movie.category}"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/movie_type_label"
+                app:layout_constraintTop_toBottomOf="@+id/movie_title" />
+
+
+            <ImageView
+                android:id="@+id/movie_rating_label"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="35dp"
+                android:gravity="center"
+                android:src="@drawable/ic_baseline_stars_24"
+                android:text="@string/rating_label"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@id/movie_rating"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/movie_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="35dp"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:setMovieRating="@{movie.rating_sum}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
