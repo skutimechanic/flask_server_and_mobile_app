@@ -41,10 +41,10 @@ def add_data():
 def remove_data():
     """Remove all data from the database"""
     try:
-        db.session.execute('DELETE FROM movies')
-        db.session.execute('ALTER TABLE movies AUTO_INCREMENT = 1')
         db.session.execute('DELETE FROM user_movies')
         db.session.execute('ALTER TABLE user_movies AUTO_INCREMENT = 1')
+        db.session.execute('DELETE FROM movies')
+        db.session.execute('ALTER TABLE movies AUTO_INCREMENT = 1')
         db.session.commit()
         print('Data has been successfully removed to database')
     except Exception as exc:
