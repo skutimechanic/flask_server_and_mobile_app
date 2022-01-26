@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.polsl.movielibrary.api.models.MovieListItemModel
+import com.polsl.movielibrary.api.models.UserMovieListItemModel
 import com.polsl.movielibrary.brokers.RepositoryInvoker
 import com.polsl.movielibrary.recource.Resource
 import com.polsl.movielibrary.repositories.AuthRepository
@@ -29,23 +31,9 @@ class UserMoviesViewModel(
 
     val userInfo: LiveData<String> = _userInfo
 
-    fun loadMovies() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                showLoader()
+    private val _movies = MutableLiveData<List<UserMovieListItemModel>>()
 
-                val result = repositoryInvoker.flowData { repository.getAllMovies() }
-
-                if (result is Resource.Success) {
-                    Log.d("Movies", result.value.toString())
-                } else {
-                    handleError(result)
-                }
-
-                hideLoader()
-            }
-        }
-    }
+    val movies: LiveData<List<UserMovieListItemModel>> = _movies
 
     fun isUserLoggedIn() {
         val token = userSession.getToken()
@@ -61,6 +49,24 @@ class UserMoviesViewModel(
 
                 if (result is Resource.Success) {
                     _userInfo.postValue(result.value.username)
+                } else {
+                    handleError(result)
+                }
+
+                hideLoader()
+            }
+        }
+    }
+
+    fun loadUSerMovies() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                showLoader()
+
+                val result = repositoryInvoker.flowData { repository.getUserMovies() }
+
+                if (result is Resource.Success) {
+                    _movies.postValue(result.value!!)
                 } else {
                     handleError(result)
                 }

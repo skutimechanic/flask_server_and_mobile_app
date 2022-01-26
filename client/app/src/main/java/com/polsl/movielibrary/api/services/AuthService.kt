@@ -12,5 +12,5 @@ interface AuthService {
     suspend fun login(@Body loginCredentials: LoginInputModel): Response<LoginOutputModel>
 
     @GET("auth/me")
-    suspend fun getLoggedUserInfo(@Header("Authorization") token: String): Response<UserInfoOutputModel>
+    suspend fun getLoggedUserInfo(): Response<UserInfoOutputModel>
 }

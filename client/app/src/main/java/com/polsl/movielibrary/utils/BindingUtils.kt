@@ -12,9 +12,13 @@ fun setImageBackground(view: ImageView, url: String?) {
 }
 
 @BindingAdapter("app:setMovieRating")
-fun setMovieRating(view: TextView, ratingSum: Int) {
-    val rating: Float = ratingSum / 10.0f
-    view.text = rating.toString()
+fun setMovieRating(view: TextView, ratingSum: Int?) {
+    if (ratingSum == null) {
+        view.text = "--"
+    } else {
+        val rating: Float = ratingSum / 10.0f
+        view.text = rating.toString()
+    }
 }
 
 @BindingAdapter("app:setNumberString")

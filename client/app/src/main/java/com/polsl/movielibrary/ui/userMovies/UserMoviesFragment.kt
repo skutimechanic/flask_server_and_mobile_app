@@ -5,7 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.R
+import com.polsl.movielibrary.api.models.UserMovieListItemModel
 import com.polsl.movielibrary.databinding.FragmentUserMoviesBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,6 +39,7 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
         viewModel.isLoggedIn.observe(viewLifecycleOwner) {
             if (it) {
                 viewModel.getUserInfo()
+                viewModel.loadUSerMovies()
             } else {
                 binding.userLoggedInLayout.visibility = View.INVISIBLE
                 binding.userNotLoggedInLayout.visibility = View.VISIBLE
@@ -48,11 +52,24 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
             binding.userLoggedInText.text = getString(R.string.user_logged_in_text, it)
         }
 
+        viewModel.movies.observe(viewLifecycleOwner) {
+            setMoviesList(it)
+        }
+
         return root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setMoviesList(movieListItems: List<UserMovieListItemModel>) {
+        with(binding.userMoviesListRecyclerView) {
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            adapter = UserMovieAdapter().apply {
+                setItems(movieListItems)
+            }
+        }
     }
 }

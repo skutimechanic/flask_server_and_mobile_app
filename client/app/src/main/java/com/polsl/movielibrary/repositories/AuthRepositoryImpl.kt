@@ -32,20 +32,16 @@ class AuthRepositoryImpl(private val authService: AuthService, private val userS
     }
 
     override suspend fun getCurrentUserInfo(): Resource<LoggedUserInfoModel> {
-        val token = userSession.getToken()
-        if (token != null && token.isActive()) {
-            val response = authService.getLoggedUserInfo(token = "Bearer $token")
-            return if (response.isSuccessful) {
-                response.body().let {
-                    if (it != null)
-                        Resource.Success(it.user)
-                    else
-                        Resource.Failure(errorMessage = "Error retrieving user info")
-                }
-            } else {
-                Resource.Failure(errorMessage = "Error retrieving user info")
+        val response = authService.getLoggedUserInfo()
+        return if (response.isSuccessful) {
+            response.body().let {
+                if (it != null)
+                    Resource.Success(it.user)
+                else
+                    Resource.Failure(errorMessage = "Error retrieving user info")
             }
+        } else {
+            Resource.Failure(errorMessage = "Error retrieving user info")
         }
-        return Resource.Failure(errorMessage = "No user logged in")
     }
 }

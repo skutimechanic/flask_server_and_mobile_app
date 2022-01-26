@@ -10,7 +10,7 @@
     <string name="logout_button">Wyloguj</string>
     <string name="invalid_credentials">Niepoprawny login lub hasło</string>
     <string name="user_not_logged_in_text">Zaloguj się, aby korzystać z tej funkcjonalności</string>
-    <string name="user_logged_in_text">Jestes zalogowany jako: %s!</string>
+    <string name="user_logged_in_text">Jestes zalogowany jako %s</string>
     <string name="year_label">Rok produkcji: </string>
     <string name="type_label">Gatunek: </string>
     <string name="rating_label">Średnia ocena: </string>
