@@ -126,17 +126,27 @@ def delete_user_movie(user_id: int, movie_id: int):
 @use_args(UserMovieSchema(exclude=['user_id']), error_status_code=400)
 def set_movie_rate(user_id: int, args: dict):
     new_rating = 0
+
+    user_movie = UserMovie.query.filter(UserMovie.user_id == user_id).filter(
+        UserMovie.movie_id == args['movie_id']).first()
+
+    if user_movie is not None:
+        abort(
+            409, description=f'Movie with id {user_movie.movie_id} exist on your list')
+
     user_movie = UserMovie(user_id=user_id, **args)
 
     movie = Movie.query.filter(Movie.id == user_movie.movie_id).first()
     if movie is None:
         abort(
-            409, description=f'Movie with id {user_movie.movie_id} not found')
+            404, description=f'Movie with id {user_movie.movie_id} not found')
 
     if user_movie.rate is not None:
         new_rating = movie.handle_rating(user_movie.rate)
         movie.rating_sum = new_rating
         movie.number_of_votes += 1
+    else:
+        new_rating = movie.rating_sum
 
     db.session.add(user_movie)
     db.session.commit()
