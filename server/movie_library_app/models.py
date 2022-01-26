@@ -21,6 +21,8 @@ class Movie(db.Model):
     director = db.Column(db.String(100))
     year = db.Column(db.Integer)
     country = db.Column(db.String(100))
+    user_movies = db.relationship(
+        'UserMovie', back_populates='movie', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f'{self.title} - {self.description}'
@@ -66,7 +68,8 @@ class UserMovie(db.Model):
     __tablename__ = 'user_movies'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
-    movie_id = db.Column(db.Integer, nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
+    movie = db.relationship('Movie', back_populates='user_movies')
     rate = db.Column(db.Integer)
    
 

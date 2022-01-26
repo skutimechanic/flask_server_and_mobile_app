@@ -29,9 +29,25 @@ def get_movies():
 
 
 @movies_bp.route('/movies/<int:movie_id>', methods=['GET'])
-def get_book(movie_id: int):
+def get_movie(movie_id: int):
     movie = Movie.query.get_or_404(
         movie_id, description=f'Movie with id {movie_id} not found')
+
+    return jsonify(
+        {
+            'success': True,
+            'data': movie_schema.dump(movie)
+        }
+    )
+
+
+@movies_bp.route('/movies/<int:movie_id>', methods=['DELETE'])
+def delete_movie(movie_id: int):
+    movie = Movie.query.get_or_404(
+        movie_id, description=f'Movie with id {movie_id} not found')
+
+    db.session.delete(movie)
+    db.session.commit()
 
     return jsonify(
         {
