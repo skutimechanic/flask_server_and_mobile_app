@@ -1,10 +1,11 @@
 from flask import jsonify
 from movie_library_app import db
-from movie_library_app.models import (Movie, MovieSchema, UserMovie,
+from movie_library_app.models import (Movie, MovieSchema, MovieWithUserRate,
+                                      MovieWithUserRateSchema, MoviesWithUserRateSchema, UserMovie,
                                       UserMovieSchema, movie_schema)
 from movie_library_app.movies import movies_bp
 from movie_library_app.utils import (abort, apply_filter, apply_order,
-                                     get_schema_args, token_required,
+                                     token_required,
                                      validate_json_content_type)
 from webargs.flaskparser import use_args
 
@@ -12,11 +13,11 @@ from webargs.flaskparser import use_args
 @movies_bp.route('/movies', methods=['GET'])
 def get_movies():
     query = Movie.query
-    schema_args = get_schema_args(Movie)
     query = apply_order(Movie, query)
     query = apply_filter(Movie, query)
 
-    movies = MovieSchema(**schema_args).dump(query.all())
+    movies = MovieSchema(
+        many=True, only=['image_link', 'title', 'year', 'category', 'rating_sum']).dump(query.all())
 
     return jsonify(
         {
@@ -43,25 +44,51 @@ def get_book(movie_id: int):
 @movies_bp.route('/user/movies', methods=['GET'])
 @token_required
 def get_user_movies(user_id: int):
+    query = Movie.query
+    query = apply_order(Movie, query)
+    query = apply_filter(Movie, query)
+
     movies = []
     user_movies = UserMovie.query.filter(UserMovie.user_id == user_id).all()
 
     if user_movies is None:
         abort(409, description=f'Movies for user with {user_id} not found')
 
-    for item in user_movies:
-        movie = Movie.query.filter(Movie.id == item.movie_id).first()
-        if movie is None:
-            abort(409, description=f'Movie with id {item.movie_id} not found')
+    for movie in query.all():
+        contains = [x for x in user_movies if x.movie_id == movie.id]
+        if contains:
+            movie_with_user_rate = MovieWithUserRate(movie, contains[0].rate)
+            movies.append(movie_with_user_rate)
 
-        movies.append(movie)
-
-    movies = MovieSchema(many=True).dump(movies)
+    movies = MoviesWithUserRateSchema(many=True).dump(movies)
 
     return jsonify(
         {
             'success': True,
             'data': movies
+        }
+    )
+    
+
+@movies_bp.route('/user/movies/<int:movie_id>', methods=['GET'])
+@token_required
+def get_user_movie(user_id: int, movie_id: int):
+    user_movie = UserMovie.query.filter(UserMovie.user_id == user_id).filter(UserMovie.movie_id == movie_id).first()
+
+    if user_movie is None:
+        abort(409, description=f'Movie with id {movie_id} for user with {user_id} not found')
+
+    movie = Movie.query.get_or_404(
+        movie_id, description=f'Movie with id {movie_id} not found')
+
+    movie_with_user_rate = MovieWithUserRate(movie, user_movie.rate)
+
+    movie = MovieWithUserRateSchema().dump(movie_with_user_rate)
+
+    return jsonify(
+        {
+            'success': True,
+            'data': movie
         }
     )
 
@@ -83,7 +110,7 @@ def set_movie_rate(user_id: int, args: dict):
         new_rating = movie.handle_rating(user_movie.rate)
         movie.rating_sum = new_rating
         movie.number_of_votes += 1
-    
+
     db.session.add(user_movie)
     db.session.commit()
 

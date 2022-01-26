@@ -44,16 +44,6 @@ def token_required(func):
     return wrapper
 
 
-def get_schema_args(model: DefaultMeta) -> dict:
-    # many=True informuje pakiet, ze przekazemy liste obiektow
-    schema_args = {'many': True}
-    fields = request.args.get('fields')
-    if fields:
-        schema_args['only'] = [field for field in fields.split(
-            ',') if field in model.__table__.columns]
-    return schema_args
-
-
 def apply_order(model: DefaultMeta, query: BaseQuery) -> BaseQuery:
     sort_keys = request.args.get('sort')
     if sort_keys:

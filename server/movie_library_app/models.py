@@ -68,6 +68,13 @@ class UserMovie(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     movie_id = db.Column(db.Integer, nullable=False)
     rate = db.Column(db.Integer)
+   
+
+class MovieWithUserRate():
+
+    def __init__(self, movie, rate):
+        self.movie = movie
+        self.rate = rate
 
 
 class MovieSchema(Schema):
@@ -84,6 +91,16 @@ class MovieSchema(Schema):
     isbn = fields.Integer(required=True)
     number_of_pages = fields.Integer(required=True)
     description = fields.String()
+
+
+class MoviesWithUserRateSchema(Schema):
+    movie = fields.Nested(lambda: MovieSchema(only=['image_link', 'title', 'year', 'category', 'rating_sum']))
+    rate = fields.Integer()
+
+
+class MovieWithUserRateSchema(Schema):
+    movie = fields.Nested(lambda: MovieSchema())
+    rate = fields.Integer()
 
 
 class UserSchema(Schema):
