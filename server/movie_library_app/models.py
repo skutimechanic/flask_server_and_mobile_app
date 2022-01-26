@@ -47,6 +47,7 @@ class User(db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+    is_admin = db.Column(db.Boolean, default=False)
 
     @staticmethod
     def generate_hashed_password(password: str) -> str:
@@ -55,6 +56,7 @@ class User(db.Model):
     def generate_jwt(self) -> str:
         payload = {
             'user_id': self.id,
+            'user_is_admin': self.is_admin,
             'exp': datetime.utcnow() + timedelta(minutes=current_app.config.get('JWT_EXPIRED_MINUTES', 30))
         }
 
@@ -113,6 +115,7 @@ class UserSchema(Schema):
     password = fields.String(
         required=True, load_only=True, validate=validate.Length(min=6, max=255))
     creation_date = fields.DateTime(dump_only=True)
+    is_admin = fields.Boolean(load_only=True)
 
 
 class UserPasswordUpdateSchema(Schema):

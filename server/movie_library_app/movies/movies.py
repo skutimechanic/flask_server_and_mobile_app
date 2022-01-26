@@ -4,7 +4,7 @@ from movie_library_app.models import (Movie, MovieSchema, MovieWithUserRate,
                                       MovieWithUserRateSchema, MoviesWithUserRateSchema, UserMovie,
                                       UserMovieSchema, movie_schema)
 from movie_library_app.movies import movies_bp
-from movie_library_app.utils import (abort, apply_filter, apply_order,
+from movie_library_app.utils import (abort, admin_token_required, apply_filter, apply_order,
                                      token_required,
                                      validate_json_content_type)
 from webargs.flaskparser import use_args
@@ -42,12 +42,17 @@ def get_movie(movie_id: int):
 
 
 @movies_bp.route('/movies/<int:movie_id>', methods=['DELETE'])
-def delete_movie(movie_id: int):
-    movie = Movie.query.get_or_404(
-        movie_id, description=f'Movie with id {movie_id} not found')
+@admin_token_required
+def delete_movie(user_is_admin: bool, movie_id: int):
+    if user_is_admin:
+        movie = Movie.query.get_or_404(
+            movie_id, description=f'Movie with id {movie_id} not found')
 
-    db.session.delete(movie)
-    db.session.commit()
+        db.session.delete(movie)
+        db.session.commit()
+    else:
+        abort(401, description=f'Access denied')
+
 
     return jsonify(
         {
