@@ -52,7 +52,7 @@ def get_user_movies(user_id: int):
     user_movies = UserMovie.query.filter(UserMovie.user_id == user_id).all()
 
     if user_movies is None:
-        abort(409, description=f'Movies for user with {user_id} not found')
+        abort(404, description=f'Movies for user with {user_id} not found')
 
     for movie in query.all():
         contains = [x for x in user_movies if x.movie_id == movie.id]
@@ -76,7 +76,7 @@ def get_user_movie(user_id: int, movie_id: int):
     user_movie = UserMovie.query.filter(UserMovie.user_id == user_id).filter(UserMovie.movie_id == movie_id).first()
 
     if user_movie is None:
-        abort(409, description=f'Movie with id {movie_id} for user with {user_id} not found')
+        abort(404, description=f'Movie with id {movie_id} for user with {user_id} not found')
 
     movie = Movie.query.get_or_404(
         movie_id, description=f'Movie with id {movie_id} not found')
@@ -131,12 +131,10 @@ def update_movie_rate(user_id: int, args: dict):
         UserMovie.movie_id == args['movie_id']).first()
 
     if user_movie is None:
-        abort(409, description=f'Movies for user with {user_id} not found')
+        abort(404, description=f'Movies for user with {user_id} not found')
 
-    movie = Movie.query.filter(Movie.id == user_movie.movie_id).first()
-    if movie is None:
-        abort(
-            409, description=f'Movie with id {user_movie.movie_id} not found')
+    movie = Movie.query.get_or_404(
+        args['movie_id'], description=f'Movie with id {args["movie_id"]} not found')
 
     if "rate" in args:
         rate = args['rate']
@@ -145,9 +143,11 @@ def update_movie_rate(user_id: int, args: dict):
             movie.number_of_votes += 1
     else:
         rate = None
-        new_rating = movie.remove_rate(user_movie.rate)
         if user_movie.rate is not None:
+            new_rating = movie.remove_rate(user_movie.rate)
             movie.number_of_votes -= 1
+        else:
+            new_rating = movie.rating_sum
 
     movie.rating_sum = new_rating
     user_movie.rate = rate
