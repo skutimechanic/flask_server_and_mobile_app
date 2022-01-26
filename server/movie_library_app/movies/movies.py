@@ -91,6 +91,33 @@ def get_user_movie(user_id: int, movie_id: int):
             'data': movie
         }
     )
+    
+
+@movies_bp.route('/user/movies/<int:movie_id>', methods=['DELETE'])
+@token_required
+def delete_user_movie(user_id: int, movie_id: int):
+    user_movie = UserMovie.query.filter(UserMovie.user_id == user_id).filter(UserMovie.movie_id == movie_id).first()
+
+    if user_movie is None:
+        abort(404, description=f'Movie with id {movie_id} for user with {user_id} not found')
+
+    movie = Movie.query.get_or_404(
+        movie_id, description=f'Movie with id {movie_id} not found')
+        
+    if user_movie.rate is not None:
+        movie.rating_sum = movie.remove_rate(user_movie.rate)
+        movie.number_of_votes -= 1
+
+
+    db.session.delete(user_movie)
+    db.session.commit()
+
+    return jsonify(
+        {
+            'success': True,
+            'data': f'Movie with id: {movie_id} has been deleted from your list'
+        }
+    )
 
 
 @movies_bp.route('/user/movies', methods=['POST'])
