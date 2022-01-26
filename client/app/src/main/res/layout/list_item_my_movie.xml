@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="com.polsl.movielibrary.api.models.MovieApiModel" />
+            type="com.polsl.movielibrary.api.models.MovieListItemModel" />
     </data>
 
     <androidx.cardview.widget.CardView

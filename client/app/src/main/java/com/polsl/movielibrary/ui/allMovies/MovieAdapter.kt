@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.R
-import com.polsl.movielibrary.api.models.MovieApiModel
+import com.polsl.movielibrary.api.models.MovieListItemModel
 import com.polsl.movielibrary.databinding.ListItemMovieBinding
 
 class MovieAdapter :
         RecyclerView.Adapter<MovieViewHolder>() {
-    private val moviesList = mutableListOf<MovieApiModel>()
+    private val moviesList = mutableListOf<MovieListItemModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,7 +30,7 @@ class MovieAdapter :
         }
     }
 
-    fun setItems(items: List<MovieApiModel>) {
+    fun setItems(items: List<MovieListItemModel>) {
         moviesList.clear()
         moviesList.addAll(items)
         notifyDataSetChanged()
