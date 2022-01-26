@@ -31,6 +31,10 @@ class Movie(db.Model):
         else:
             rating = self.rating_sum*self.number_of_votes-old_rate
             return (rating+rate)//(self.number_of_votes)
+        
+    def remove_rate(self, old_rate) -> int:
+        rating = self.rating_sum*self.number_of_votes-old_rate
+        return rating//(self.number_of_votes-1)
 
 
 class User(db.Model):

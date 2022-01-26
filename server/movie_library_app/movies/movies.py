@@ -71,6 +71,7 @@ def get_user_movies(user_id: int):
 @validate_json_content_type
 @use_args(UserMovieSchema(exclude=['user_id']), error_status_code=400)
 def set_movie_rate(user_id: int, args: dict):
+    new_rating = 0
     user_movie = UserMovie(user_id=user_id, **args)
 
     movie = Movie.query.filter(Movie.id == user_movie.movie_id).first()
@@ -78,10 +79,11 @@ def set_movie_rate(user_id: int, args: dict):
         abort(
             409, description=f'Movie with id {user_movie.movie_id} not found')
 
-    new_rating = movie.handle_rating(user_movie.rate)
-
-    movie.rating_sum = new_rating
-    movie.number_of_votes += 1
+    if user_movie.rate is not None:
+        new_rating = movie.handle_rating(user_movie.rate)
+        movie.rating_sum = new_rating
+        movie.number_of_votes += 1
+    
     db.session.add(user_movie)
     db.session.commit()
 
@@ -109,10 +111,19 @@ def update_movie_rate(user_id: int, args: dict):
         abort(
             409, description=f'Movie with id {user_movie.movie_id} not found')
 
-    new_rating = movie.handle_rating(args['rate'], user_movie.rate)
+    if "rate" in args:
+        rate = args['rate']
+        new_rating = movie.handle_rating(args['rate'], user_movie.rate)
+        if user_movie.rate is None:
+            movie.number_of_votes += 1
+    else:
+        rate = None
+        new_rating = movie.remove_rate(user_movie.rate)
+        if user_movie.rate is not None:
+            movie.number_of_votes -= 1
 
     movie.rating_sum = new_rating
-    user_movie.rate = args['rate']
+    user_movie.rate = rate
     db.session.commit()
 
     return jsonify(
