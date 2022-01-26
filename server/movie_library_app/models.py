@@ -94,7 +94,7 @@ class MovieSchema(Schema):
 
 
 class MoviesWithUserRateSchema(Schema):
-    movie = fields.Nested(lambda: MovieSchema(only=['image_link', 'title', 'year', 'category', 'rating_sum']))
+    movie = fields.Nested(lambda: MovieSchema(only=['id', 'image_link', 'title', 'year', 'category', 'rating_sum']))
     rate = fields.Integer()
 
 

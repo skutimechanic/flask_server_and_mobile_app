@@ -17,7 +17,7 @@ def get_movies():
     query = apply_filter(Movie, query)
 
     movies = MovieSchema(
-        many=True, only=['image_link', 'title', 'year', 'category', 'rating_sum']).dump(query.all())
+        many=True, only=['id', 'image_link', 'title', 'year', 'category', 'rating_sum']).dump(query.all())
 
     return jsonify(
         {
