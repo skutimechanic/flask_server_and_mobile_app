@@ -71,7 +71,7 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
     private fun setMoviesList(movieListItems: List<UserMovieListItemModel>) {
         with(binding.userMoviesListRecyclerView) {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = UserMovieAdapter().apply {
+            adapter = UserMovieAdapter { viewModel.handleOnItemClick(it) }.apply {
                 setItems(movieListItems)
             }
         }

@@ -1,5 +1,6 @@
 package com.polsl.movielibrary.ui.allMovies
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -37,5 +38,9 @@ class AllMoviesViewModel(
                 hideLoader()
             }
         }
+    }
+
+    fun handleOnItemClick(movieId: Int) {
+        Log.e("ITEM_CLICK", "Movie with id clicked $movieId")
     }
 }

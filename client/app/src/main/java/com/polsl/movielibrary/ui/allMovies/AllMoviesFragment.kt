@@ -23,9 +23,9 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
         viewModel.movies.observe(viewLifecycleOwner, Observer {
@@ -46,7 +46,7 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     private fun setMoviesList(movieListItems: List<MovieListItemModel>) {
         with(binding.moviesListRecyclerView) {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = MovieAdapter().apply {
+            adapter = MovieAdapter { viewModel.handleOnItemClick(it) }.apply {
                 setItems(movieListItems)
             }
         }
