@@ -13,5 +13,11 @@
     <string name="user_logged_in_text">Jestes zalogowany jako %s</string>
     <string name="year_label">Rok produkcji: </string>
     <string name="type_label">Gatunek: </string>
+    <string name="director_label">Reżyseria: </string>
+    <string name="country_label">Kraj produkcji: </string>
+    <string name="votes_label">Liczba ocen: </string>
+    <string name="global_rate_label">Ocena użytkowników: </string>
+    <string name="my_rate_label">Moja ocena: </string>
+    <string name="add_movie_button_label">Dodaj do mojej listy</string>
     <string name="rating_label">Średnia ocena: </string>
 </resources>
