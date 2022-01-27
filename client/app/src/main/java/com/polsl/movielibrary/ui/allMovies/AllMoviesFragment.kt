@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.api.models.MovieListItemModel
@@ -23,9 +24,9 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
         viewModel.movies.observe(viewLifecycleOwner, Observer {
@@ -46,9 +47,16 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     private fun setMoviesList(movieListItems: List<MovieListItemModel>) {
         with(binding.moviesListRecyclerView) {
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = MovieAdapter { viewModel.handleOnItemClick(it) }.apply {
+            adapter = MovieAdapter {
+                navigateToDetails(it)
+            }.apply {
                 setItems(movieListItems)
             }
         }
+    }
+
+    private fun navigateToDetails(movieId: Int) {
+        val action = AllMoviesFragmentDirections.actionNavigationAllMoviesToNavigationMovieDetails(movieId)
+        findNavController().navigate(action)
     }
 }
