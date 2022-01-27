@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.R
@@ -23,15 +23,20 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentUserMoviesBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.buttonGetMovies.setOnClickListener {
-            view?.findNavController()?.navigate(R.id.action_navigation_user_movies_to_navigation_login)
+            findNavController().navigate(R.id.action_navigation_user_movies_to_navigation_login)
         }
 
         viewModel.isUserLoggedIn()
@@ -56,7 +61,6 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
             setMoviesList(it)
         }
 
-        return root
     }
 
     override fun onDestroyView() {

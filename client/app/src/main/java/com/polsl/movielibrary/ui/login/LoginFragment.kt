@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.polsl.movielibrary.R
 import com.polsl.movielibrary.databinding.FragmentLoginBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
@@ -35,7 +35,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
         }
         viewModel.isLoggedIn.observe(viewLifecycleOwner, Observer {
             if (it) {
-                view?.findNavController()?.popBackStack()
+                findNavController().popBackStack()
             } else {
                 Toast.makeText(
                         activity,

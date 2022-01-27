@@ -13,6 +13,7 @@ import com.polsl.movielibrary.repositories.MoviesRepository
 import com.polsl.movielibrary.ui.base.BaseViewModel
 import com.polsl.movielibrary.utils.UserSession
 import com.polsl.movielibrary.utils.isActive
+import com.polsl.movielibrary.utils.isAdmin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,6 +39,7 @@ class UserMoviesViewModel(
     fun isUserLoggedIn() {
         val token = userSession.getToken()
         _isLoggedIn.postValue(token != null && token.isActive())
+        Log.e("TOKEN TEST", "Is admin: ${token?.isAdmin()}")
     }
 
     fun getUserInfo() {
