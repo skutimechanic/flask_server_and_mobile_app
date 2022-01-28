@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.polsl.movielibrary.databinding.FragmentMovieDetailsBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
+import com.polsl.movielibrary.utils.setOnBackPressed
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
@@ -18,15 +19,22 @@ class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setOnBackPressed {
+            findNavController().popBackStack()
+        }
+    }
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
-        viewModel.movieDetails.observe(viewLifecycleOwner, Observer {
+        viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.movie = it
-        })
+        }
         return binding.root
     }
 

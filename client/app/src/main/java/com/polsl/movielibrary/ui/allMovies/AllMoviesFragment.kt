@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.api.models.MovieListItemModel
 import com.polsl.movielibrary.databinding.FragmentAllMoviesBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
+import com.polsl.movielibrary.utils.setOnBackPressed
+import com.polsl.movielibrary.utils.showDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
@@ -23,15 +24,23 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setOnBackPressed {
+            showTurnOffDialog()
+        }
+    }
+
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
-        viewModel.movies.observe(viewLifecycleOwner, Observer {
+        viewModel.movies.observe(viewLifecycleOwner) {
             setMoviesList(it)
-        })
+        }
         return binding.root
     }
 
@@ -56,7 +65,16 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     }
 
     private fun navigateToDetails(movieId: Int) {
-        val action = AllMoviesFragmentDirections.actionNavigationAllMoviesToNavigationMovieDetails(movieId)
+        val action =
+            AllMoviesFragmentDirections.actionNavigationAllMoviesToNavigationMovieDetails(movieId)
         findNavController().navigate(action)
+    }
+
+    private fun showTurnOffDialog() {
+        showDialog(
+            title = "Do you want to exit app?",
+            positiveButton = "Yes" to { requireActivity().finish() },
+            negativeButton = "Stay" to {}
+        )
     }
 }
