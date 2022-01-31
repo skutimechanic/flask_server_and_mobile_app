@@ -258,6 +258,18 @@
             app:setDetailsButtonLabel="@{movie.isUserMovie}" />
 
 
+        <ImageView
+            android:id="@+id/admin_delete_movie_button"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_baseline_delete_24"
+            app:isVisible="@{viewModel.isUserAdmin()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/add_movie_button"
+            app:layout_constraintBottom_toBottomOf="@+id/add_movie_button"
+            app:layout_constraintTop_toTopOf="@+id/add_movie_button" />
+
+
         <include
             android:id="@+id/include"
             layout="@layout/progress_bar_base"

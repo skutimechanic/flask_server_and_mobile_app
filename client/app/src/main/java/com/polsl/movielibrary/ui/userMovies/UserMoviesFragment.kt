@@ -53,7 +53,6 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
         viewModel.userInfo.observe(viewLifecycleOwner) {
             binding.userLoggedInLayout.visibility = View.VISIBLE
             binding.userNotLoggedInLayout.visibility = View.INVISIBLE
-            binding.userLoggedInText.text = getString(R.string.user_logged_in_text, it)
         }
 
         viewModel.movies.observe(viewLifecycleOwner) {

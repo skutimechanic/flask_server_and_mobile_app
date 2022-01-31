@@ -23,4 +23,9 @@
     <string name="update_rate">Zaktualizuj ocenę</string>
     <string name="rating_label">Średnia ocena: </string>
     <string name="toast_movie_added_to_favortie">Film dodany do ulubionych!</string>
+    <string name="toast_movie_deleted">Film usunięty</string>
+    <string name="dialog_delete_movie_title">Usuwanie filmu</string>
+    <string name="dialog_delete_movie_message">Czy jesteś pewny, że chcesz całkowicie usunąć film %s</string>
+    <string name="yes">Tak</string>
+    <string name="no">Nie</string>
 </resources>

@@ -8,8 +8,10 @@ import com.polsl.movielibrary.recource.Resource
 import com.polsl.movielibrary.repositories.MoviesRepository
 import com.polsl.movielibrary.repositories.models.ExtendedMovieDetailsItemModel
 import com.polsl.movielibrary.ui.base.BaseViewModel
+import com.polsl.movielibrary.utils.SingleLiveEvent
 import com.polsl.movielibrary.utils.UserSession
 import com.polsl.movielibrary.utils.isActive
+import com.polsl.movielibrary.utils.isAdmin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,6 +26,10 @@ class MovieDetailsViewModel(
     val movieDetails: LiveData<ExtendedMovieDetailsItemModel> = _movieDetails
     private val _isUerActive = MutableLiveData<Boolean>()
     val isUserActive: LiveData<Boolean> = _isUerActive
+    private val _isUserAdmin = MutableLiveData<Boolean>()
+    var isUserAdmin: LiveData<Boolean> = _isUserAdmin
+    private val _deleteFinished = SingleLiveEvent(false)
+    val deleteFinished: LiveData<Boolean> = _deleteFinished
 
     fun loadDetails(movieId: Int) {
         viewModelScope.launch {
@@ -82,6 +88,11 @@ class MovieDetailsViewModel(
         }
     }
 
+    fun checkUserPrivilege() {
+        val token = userSession.getToken()
+        _isUserAdmin.postValue(token != null && token.isActive() && token.isAdmin())
+    }
+
     fun deleteMovie(id: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -90,7 +101,7 @@ class MovieDetailsViewModel(
                 val result = repositoryInvoker.flowData { repository.deleteMovie(id) }
 
                 if (result is Resource.Success) {
-                    //TODO toast
+                    _deleteFinished.postValue(true)
                 } else {
                     handleError(result)
                 }

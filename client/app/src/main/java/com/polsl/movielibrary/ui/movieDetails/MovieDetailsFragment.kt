@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.polsl.movielibrary.R
 import com.polsl.movielibrary.databinding.FragmentMovieDetailsBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
 import com.polsl.movielibrary.utils.setOnBackPressed
+import com.polsl.movielibrary.utils.showDialog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
@@ -41,6 +44,27 @@ class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
             binding.movie = it
         }
 
+        binding.adminDeleteMovieButton.setOnClickListener {
+            showDialog(
+                    title = getString(R.string.dialog_delete_movie_title),
+                    message = getString(R.string.dialog_delete_movie_message, binding.movie!!.movie.title),
+                    positiveButton = getString(R.string.yes) to { viewModel.deleteMovie(binding.movie!!.movie.id) },
+                    negativeButton = getString(R.string.no) to {}
+            )
+        }
+
+        viewModel.deleteFinished.observe(viewLifecycleOwner) {
+            if (it) {
+                val toast = Toast.makeText(
+                        requireContext(),
+                        R.string.toast_movie_deleted,
+                        Toast.LENGTH_SHORT
+                )
+                toast.show()
+                findNavController().popBackStack()
+            }
+        }
+
         binding.addMovieButton.setOnClickListener {
             if (binding.movie!!.isUserMovie) {
                 viewModel.updateUserRate(binding.movie!!.movie.id, binding.movieMyRateSlider.value)
@@ -55,7 +79,7 @@ class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         arguments?.let {
             val safeArgs = MovieDetailsFragmentArgs.fromBundle(it)
-
+            viewModel.checkUserPrivilege()
             viewModel.loadDetails(safeArgs.movieId)
         }
     }
