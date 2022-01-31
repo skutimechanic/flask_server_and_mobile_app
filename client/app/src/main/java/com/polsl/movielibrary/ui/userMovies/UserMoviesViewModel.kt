@@ -9,6 +9,7 @@ import com.polsl.movielibrary.recource.Resource
 import com.polsl.movielibrary.repositories.AuthRepository
 import com.polsl.movielibrary.repositories.MoviesRepository
 import com.polsl.movielibrary.ui.base.BaseViewModel
+import com.polsl.movielibrary.utils.SingleLiveEvent
 import com.polsl.movielibrary.utils.UserSession
 import com.polsl.movielibrary.utils.isActive
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,9 @@ class UserMoviesViewModel(
     private val _movies = MutableLiveData<List<UserMovieListItemModel>>()
 
     val movies: LiveData<List<UserMovieListItemModel>> = _movies
+
+    private val _removedMovie = SingleLiveEvent(false)
+    val removedMovie: LiveData<Boolean> = _removedMovie
 
     fun isUserLoggedIn() {
         val token = userSession.getToken()
@@ -82,7 +86,7 @@ class UserMoviesViewModel(
                 val result = repositoryInvoker.flowData { repository.deleteMovieFromUserList(id) }
 
                 if (result is Resource.Success) {
-                    //TODO toast
+                    _removedMovie.postValue(true)
                 } else {
                     handleError(result)
                 }

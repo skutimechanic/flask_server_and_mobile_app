@@ -75,9 +75,9 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
 
     private fun showTurnOffDialog() {
         showDialog(
-            title = "Do you want to exit app?",
-            positiveButton = "Yes" to { requireActivity().finish() },
-            negativeButton = "Stay" to {}
+            title = "Czy chcesz opuścić aplikacje?",
+            positiveButton = "Tak" to { requireActivity().finish() },
+            negativeButton = "Zostań" to {}
         )
     }
 }
