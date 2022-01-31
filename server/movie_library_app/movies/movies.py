@@ -175,7 +175,7 @@ def set_movie_rate(user_id: int, args: dict):
     return jsonify(
         {
             'success': True,
-            'data': new_rating
+            'data': MovieWithUserRateSchema().dump(user_movie)
         }
     )
 
@@ -214,6 +214,6 @@ def update_movie_rate(user_id: int, args: dict):
     return jsonify(
         {
             'success': True,
-            'data': new_rating
+            'data': MovieWithUserRateSchema().dump(user_movie)
         }
     )
