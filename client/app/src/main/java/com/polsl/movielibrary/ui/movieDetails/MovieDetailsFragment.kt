@@ -32,6 +32,11 @@ class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
             savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+
+        binding.viewModel = viewModel
+
+        binding.lifecycleOwner = viewLifecycleOwner
+
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.movie = it
         }

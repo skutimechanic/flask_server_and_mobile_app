@@ -18,5 +18,5 @@ val viewModelModule = module {
 
     viewModel { SettingsViewModel(get()) }
 
-    viewModel { MovieDetailsViewModel(get(), get()) }
+    viewModel { MovieDetailsViewModel(get(), get(), get()) }
 }

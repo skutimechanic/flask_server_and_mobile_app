@@ -1,11 +1,13 @@
 package com.polsl.movielibrary.repositories
 
-import com.polsl.movielibrary.api.models.MovieDetailsItemModel
+import com.polsl.movielibrary.api.models.MovieDetailsOutputModel
 import com.polsl.movielibrary.api.models.MovieListItemModel
-import com.polsl.movielibrary.api.models.UserMovieDetailsItemModel
+import com.polsl.movielibrary.api.models.UserMovieDetailsOutputModel
 import com.polsl.movielibrary.api.models.UserMovieListItemModel
 import com.polsl.movielibrary.api.services.MoviesService
 import com.polsl.movielibrary.recource.Resource
+import com.polsl.movielibrary.repositories.models.ExtendedMovieDetailsItemModel
+import retrofit2.Response
 
 class MoviesRepositoryImpl(private val moviesService: MoviesService) : MoviesRepository {
 
@@ -18,7 +20,7 @@ class MoviesRepositoryImpl(private val moviesService: MoviesService) : MoviesRep
             } ?: Resource.Success(emptyList())
         } else {
             Resource
-                    .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+                .Failure(errorMessage = "Error occurred while passing list from API to Repository")
         }
 
     }
@@ -32,16 +34,69 @@ class MoviesRepositoryImpl(private val moviesService: MoviesService) : MoviesRep
             } ?: Resource.Success(emptyList())
         } else {
             Resource
-                    .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+                .Failure(errorMessage = "Error occurred while passing list from API to Repository")
         }
 
     }
 
-    override suspend fun getMovieDetails(id: Int): Resource<MovieDetailsItemModel> {
-        TODO("Not yet implemented")
+    override suspend fun getMovieDetails(id: Int): Resource<ExtendedMovieDetailsItemModel?> {
+        val response = moviesService.getUserMovieDetails(id)
+
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                Resource.Success(createModel(it))
+            } ?: Resource.Success(null)
+        } else {
+            handleErrorCallWithToken(id, response)
+        }
     }
 
-    override suspend fun getUserMovieDetails(id: Int): Resource<UserMovieDetailsItemModel> {
-        TODO("Not yet implemented")
+    override suspend fun getUserMovieDetails(id: Int): Resource<ExtendedMovieDetailsItemModel?> {
+        val response = moviesService.getUserMovieDetails(id)
+
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                Resource.Success(createModel(it))
+            } ?: Resource.Success(null)
+        } else {
+            Resource
+                .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+        }
     }
+
+    private suspend fun handleErrorCallWithToken(
+        movieId: Int,
+        response: Response<UserMovieDetailsOutputModel>
+    ): Resource<ExtendedMovieDetailsItemModel?> =
+        when {
+            response.code() == 404 || response.code() == 401 -> {
+                val secondResponse = moviesService.getMovieDetails(movieId)
+                if (secondResponse.isSuccessful) {
+                    secondResponse.body()?.let {
+                        Resource.Success(createModel(it))
+                    } ?: Resource.Success(null)
+                } else {
+                    Resource
+                        .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+                }
+            }
+            else -> {
+                Resource
+                    .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+            }
+        }
+
+    private fun createModel(item: UserMovieDetailsOutputModel) =
+        ExtendedMovieDetailsItemModel(
+            movie = item.movie.movie,
+            rate = item.movie.rate,
+            isUserMovie = true
+        )
+
+    private fun createModel(item: MovieDetailsOutputModel) =
+        ExtendedMovieDetailsItemModel(
+            movie = item.movie,
+            rate = null,
+            isUserMovie = false
+        )
 }

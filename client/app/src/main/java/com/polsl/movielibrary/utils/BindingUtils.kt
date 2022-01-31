@@ -1,5 +1,6 @@
 package com.polsl.movielibrary.utils
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -50,6 +51,14 @@ fun setMovieRatingSlider(view: Slider, ratingSum: Int?) {
             val rating: Float = ratingSum / 10.0f
             view.value = rating
         }
+    }
+}
+
+object BindingAdapters {
+    @BindingAdapter("isVisible")
+    @JvmStatic
+    fun View.setVisible(show: Boolean?) {
+        visibility = if (show == true) View.VISIBLE else View.GONE
     }
 }
 
