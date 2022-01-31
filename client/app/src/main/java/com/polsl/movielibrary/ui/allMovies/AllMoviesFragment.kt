@@ -5,9 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.polsl.movielibrary.api.models.MovieListItemModel
 import com.polsl.movielibrary.databinding.FragmentAllMoviesBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
 import com.polsl.movielibrary.utils.setOnBackPressed
@@ -18,11 +15,11 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
 
     override val viewModel: AllMoviesViewModel by viewModel()
     private var _binding: FragmentAllMoviesBinding? = null
-    var adapter: MovieAdapter? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val adapter = MovieAdapter { navigateToDetails(it) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +35,10 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAllMoviesBinding.inflate(inflater, container, false)
+        binding.moviesListRecyclerView.adapter = adapter
+
         viewModel.movies.observe(viewLifecycleOwner) {
-            setMoviesList(it)
+            adapter.setItems(it)
         }
         return binding.root
     }
@@ -51,17 +50,6 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun setMoviesList(movieListItems: List<MovieListItemModel>) {
-        with(binding.moviesListRecyclerView) {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = MovieAdapter {
-                navigateToDetails(it)
-            }.apply {
-                setItems(movieListItems)
-            }
-        }
     }
 
     private fun navigateToDetails(movieId: Int) {

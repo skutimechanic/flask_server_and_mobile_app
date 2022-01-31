@@ -5,10 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.polsl.movielibrary.R
-import com.polsl.movielibrary.api.models.UserMovieListItemModel
 import com.polsl.movielibrary.databinding.FragmentUserMoviesBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,6 +18,7 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private val adapter = UserMovieAdapter { navigateToDetails(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +32,7 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.userMoviesListRecyclerView.adapter = adapter
 
         binding.buttonGetMovies.setOnClickListener {
             findNavController().navigate(R.id.action_navigation_user_movies_to_navigation_login)
@@ -58,7 +57,7 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
         }
 
         viewModel.movies.observe(viewLifecycleOwner) {
-            setMoviesList(it)
+            adapter.setItems(it)
         }
 
     }
@@ -68,12 +67,9 @@ class UserMoviesFragment : BaseFragment<UserMoviesViewModel>() {
         _binding = null
     }
 
-    private fun setMoviesList(movieListItems: List<UserMovieListItemModel>) {
-        with(binding.userMoviesListRecyclerView) {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = UserMovieAdapter { viewModel.handleOnItemClick(it) }.apply {
-                setItems(movieListItems)
-            }
-        }
+    private fun navigateToDetails(movieId: Int) {
+        val action =
+            UserMoviesFragmentDirections.actionNavigationUserMoviesToNavigationMovieDetails(movieId)
+        findNavController().navigate(action)
     }
 }
