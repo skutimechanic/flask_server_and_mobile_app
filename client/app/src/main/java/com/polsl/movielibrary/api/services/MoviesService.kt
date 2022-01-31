@@ -1,13 +1,8 @@
 package com.polsl.movielibrary.api.services
 
-import com.polsl.movielibrary.api.models.AllMoviesOutputModel
-import com.polsl.movielibrary.api.models.MovieDetailsOutputModel
-import com.polsl.movielibrary.api.models.UserMovieDetailsOutputModel
-import com.polsl.movielibrary.api.models.UserMoviesOutputModel
+import com.polsl.movielibrary.api.models.*
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MoviesService {
 
@@ -22,4 +17,10 @@ interface MoviesService {
 
     @GET("user/movies/{id}")
     suspend fun getUserMovieDetails(@Path("id") id: Int): Response<UserMovieDetailsOutputModel>
+
+    @POST("user/movies")
+    suspend fun addMovieToUserList(@Body addMovieModel: AddMovieModel): Response<UserMovieDetailsOutputModel>
+
+    @PUT("user/movies")
+    suspend fun updateUserRate(@Body rateMovieModel: RateMovieModel): Response<UserMovieDetailsOutputModel>
 }

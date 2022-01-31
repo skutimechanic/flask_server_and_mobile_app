@@ -25,7 +25,7 @@ class MovieDetailsViewModel(
     private val _isUerActive = MutableLiveData<Boolean>()
     val isUserActive: LiveData<Boolean> = _isUerActive
 
-    fun loadDetails(id: Int) {
+    fun loadDetails(movieId: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 showLoader()
@@ -36,7 +36,41 @@ class MovieDetailsViewModel(
                 } else {
                     _isUerActive.postValue(false)
                 }
-                val result = repositoryInvoker.flowData { repository.getMovieDetails(id) }
+                val result = repositoryInvoker.flowData { repository.getMovieDetails(movieId) }
+                if (result is Resource.Success) {
+                    _movieDetails.postValue(result.value!!)
+                } else {
+                    handleError(result)
+                }
+
+                hideLoader()
+            }
+        }
+    }
+
+    fun addMovieToUserList(movieId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                showLoader()
+
+                val result = repositoryInvoker.flowData { repository.addMovieToUserList(movieId) }
+                if (result is Resource.Success) {
+                    _movieDetails.postValue(result.value!!)
+                } else {
+                    handleError(result)
+                }
+
+                hideLoader()
+            }
+        }
+    }
+
+    fun updateUserRate(movieId: Int, rate: Float) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                showLoader()
+
+                val result = repositoryInvoker.flowData { repository.updateUserRate(movieId, rate) }
                 if (result is Resource.Success) {
                     _movieDetails.postValue(result.value!!)
                 } else {

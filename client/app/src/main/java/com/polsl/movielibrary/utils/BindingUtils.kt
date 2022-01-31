@@ -1,10 +1,13 @@
 package com.polsl.movielibrary.utils
 
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.slider.Slider
+import com.polsl.movielibrary.R
+import com.polsl.movielibrary.repositories.models.ExtendedMovieDetailsItemModel
 
 @BindingAdapter("app:setImageBackground")
 fun setImageBackground(view: ImageView, url: String?) {
@@ -52,6 +55,11 @@ fun setMovieRatingSlider(view: Slider, ratingSum: Int?) {
             view.value = rating
         }
     }
+}
+
+@BindingAdapter("app:setDetailsButtonLabel")
+fun setDetailsButtonLabel(button: Button, isUserMovie: Boolean?) {
+    button.text = if (isUserMovie == true) button.context.getString(R.string.update_rate) else button.context.getString(R.string.add_movie_button_label)
 }
 
 object BindingAdapters {

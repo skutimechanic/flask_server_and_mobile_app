@@ -40,6 +40,15 @@ class MovieDetailsFragment : BaseFragment<MovieDetailsViewModel>() {
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             binding.movie = it
         }
+
+        binding.addMovieButton.setOnClickListener {
+            if (binding.movie!!.isUserMovie) {
+                viewModel.updateUserRate(binding.movie!!.movie.id, binding.movieMyRateSlider.value)
+            } else {
+                viewModel.addMovieToUserList(binding.movie!!.movie.id)
+            }
+        }
+
         return binding.root
     }
 

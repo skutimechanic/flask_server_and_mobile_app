@@ -20,5 +20,6 @@
     <string name="global_rate_label">Ocena użytkowników: </string>
     <string name="my_rate_label">Moja ocena: </string>
     <string name="add_movie_button_label">Dodaj do mojej listy</string>
+    <string name="update_rate">Zaktualizuj ocenę</string>
     <string name="rating_label">Średnia ocena: </string>
 </resources>
