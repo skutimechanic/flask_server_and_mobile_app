@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MovieDetailsViewModel(
-    private val repository: MoviesRepository,
-    private val repositoryInvoker: RepositoryInvoker,
-    private val userSession: UserSession,
+        private val repository: MoviesRepository,
+        private val repositoryInvoker: RepositoryInvoker,
+        private val userSession: UserSession,
 ) : BaseViewModel() {
 
     private val _movieDetails = MutableLiveData<ExtendedMovieDetailsItemModel>()
@@ -31,14 +31,12 @@ class MovieDetailsViewModel(
                 showLoader()
 
                 val token = userSession.getToken()
-                val result = if (token != null && token.isActive()) {
+                if (token != null && token.isActive()) {
                     _isUerActive.postValue(true)
-                    repositoryInvoker.flowData { repository.getUserMovieDetails(id) }
                 } else {
                     _isUerActive.postValue(false)
-                    repositoryInvoker.flowData { repository.getMovieDetails(id) }
                 }
-
+                val result = repositoryInvoker.flowData { repository.getMovieDetails(id) }
                 if (result is Resource.Success) {
                     _movieDetails.postValue(result.value!!)
                 } else {

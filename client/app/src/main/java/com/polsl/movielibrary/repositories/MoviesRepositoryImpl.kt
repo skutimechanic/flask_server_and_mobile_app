@@ -51,19 +51,6 @@ class MoviesRepositoryImpl(private val moviesService: MoviesService) : MoviesRep
         }
     }
 
-    override suspend fun getUserMovieDetails(id: Int): Resource<ExtendedMovieDetailsItemModel?> {
-        val response = moviesService.getUserMovieDetails(id)
-
-        return if (response.isSuccessful) {
-            response.body()?.let {
-                Resource.Success(createModel(it))
-            } ?: Resource.Success(null)
-        } else {
-            Resource
-                .Failure(errorMessage = "Error occurred while passing list from API to Repository")
-        }
-    }
-
     private suspend fun handleErrorCallWithToken(
         movieId: Int,
         response: Response<UserMovieDetailsOutputModel>

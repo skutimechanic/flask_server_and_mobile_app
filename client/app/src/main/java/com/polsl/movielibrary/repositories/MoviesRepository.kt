@@ -10,5 +10,4 @@ interface MoviesRepository {
     suspend fun getAllMovies(): Resource<List<MovieListItemModel>>
     suspend fun getUserMovies(): Resource<List<UserMovieListItemModel>>
     suspend fun getMovieDetails(id: Int): Resource<ExtendedMovieDetailsItemModel?>
-    suspend fun getUserMovieDetails(id: Int): Resource<ExtendedMovieDetailsItemModel?>
 }
