@@ -74,6 +74,32 @@ class MoviesRepositoryImpl(private val moviesService: MoviesService) : MoviesRep
         }
     }
 
+    override suspend fun deleteMovie(id: Int): Resource<Boolean> {
+        val response = moviesService.deleteMovie(id)
+
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                Resource.Success(it.success)
+            } ?: Resource.Success(false)
+        } else {
+            Resource
+                    .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+        }
+    }
+
+    override suspend fun deleteMovieFromUserList(id: Int): Resource<Boolean> {
+        val response = moviesService.deleteMovieFromUserList(id)
+
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                Resource.Success(it.success)
+            } ?: Resource.Success(false)
+        } else {
+            Resource
+                    .Failure(errorMessage = "Error occurred while passing list from API to Repository")
+        }
+    }
+
     private suspend fun handleErrorCallWithToken(
             movieId: Int,
             response: Response<UserMovieDetailsOutputModel>

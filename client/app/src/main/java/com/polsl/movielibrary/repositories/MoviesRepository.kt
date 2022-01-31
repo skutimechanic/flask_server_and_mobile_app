@@ -12,4 +12,6 @@ interface MoviesRepository {
     suspend fun getMovieDetails(id: Int): Resource<ExtendedMovieDetailsItemModel?>
     suspend fun addMovieToUserList(id: Int): Resource<ExtendedMovieDetailsItemModel?>
     suspend fun updateUserRate(id: Int, rate: Float): Resource<ExtendedMovieDetailsItemModel?>
+    suspend fun deleteMovie(id: Int): Resource<Boolean>
+    suspend fun deleteMovieFromUserList(id: Int): Resource<Boolean>
 }

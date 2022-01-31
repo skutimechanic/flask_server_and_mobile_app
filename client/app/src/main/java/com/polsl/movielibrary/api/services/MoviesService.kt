@@ -23,4 +23,10 @@ interface MoviesService {
 
     @PUT("user/movies")
     suspend fun updateUserRate(@Body rateMovieModel: RateMovieModel): Response<UserMovieDetailsOutputModel>
+
+    @DELETE("movies/{id}")
+    suspend fun deleteMovie(@Path("id") id: Int): Response<MovieDetailsOutputModel>
+
+    @DELETE("user/movies/{id}")
+    suspend fun deleteMovieFromUserList(@Path("id") id: Int): Response<DeleteUserMovieOutputModel>
 }

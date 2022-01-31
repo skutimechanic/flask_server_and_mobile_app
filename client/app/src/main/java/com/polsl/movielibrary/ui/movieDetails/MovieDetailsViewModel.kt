@@ -81,4 +81,22 @@ class MovieDetailsViewModel(
             }
         }
     }
+
+    fun deleteMovie(id: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                showLoader()
+
+                val result = repositoryInvoker.flowData { repository.deleteMovie(id) }
+
+                if (result is Resource.Success) {
+                    //TODO toast
+                } else {
+                    handleError(result)
+                }
+
+                hideLoader()
+            }
+        }
+    }
 }

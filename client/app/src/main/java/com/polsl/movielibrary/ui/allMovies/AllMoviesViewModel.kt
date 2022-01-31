@@ -39,8 +39,4 @@ class AllMoviesViewModel(
             }
         }
     }
-
-    fun handleOnItemClick(movieId: Int) {
-        Log.e("ITEM_CLICK", "Movie with id clicked $movieId")
-    }
 }
