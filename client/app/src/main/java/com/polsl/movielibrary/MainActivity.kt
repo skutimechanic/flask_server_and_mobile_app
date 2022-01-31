@@ -5,6 +5,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.polsl.movielibrary.databinding.ActivityMainBinding
@@ -26,10 +27,15 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_all_movies, R.id.navigation_user_movies, R.id.navigation_settings
+                R.id.navigation_all_movies,
+                R.id.navigation_user_movies,
+                R.id.navigation_settings
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    override fun onSupportNavigateUp(): Boolean =
+        findNavController(R.id.nav_host_fragment_activity_main).navigateUp()
 }
