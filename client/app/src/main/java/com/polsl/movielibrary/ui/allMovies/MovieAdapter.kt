@@ -8,8 +8,10 @@ import com.polsl.movielibrary.R
 import com.polsl.movielibrary.api.models.MovieListItemModel
 import com.polsl.movielibrary.databinding.ListItemMovieBinding
 
-class MovieAdapter(private val clickListener: (Int) -> Unit) :
-        RecyclerView.Adapter<MovieViewHolder>() {
+class MovieAdapter(
+    private val clickItemListener: (Int) -> Unit,
+    private val clickFavoriteListener: (Int) -> Unit
+) : RecyclerView.Adapter<MovieViewHolder>() {
     private val moviesList = mutableListOf<MovieListItemModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -26,9 +28,12 @@ class MovieAdapter(private val clickListener: (Int) -> Unit) :
 
     override fun onBindViewHolder(viewHolder: MovieViewHolder, position: Int) {
         viewHolder.apply {
-            onBind(moviesList[position])
+            onBind(
+                modelListItem = moviesList[position],
+                clickFavoriteListener = clickFavoriteListener
+            )
             itemView.setOnClickListener {
-                clickListener(moviesList[position].id)
+                clickItemListener(moviesList[position].id)
             }
         }
     }

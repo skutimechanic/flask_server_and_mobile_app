@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.polsl.movielibrary.R
 import com.polsl.movielibrary.databinding.FragmentAllMoviesBinding
 import com.polsl.movielibrary.ui.base.BaseFragment
 import com.polsl.movielibrary.utils.setOnBackPressed
@@ -19,7 +21,10 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val adapter = MovieAdapter { navigateToDetails(it) }
+    private val adapter = MovieAdapter(
+        clickItemListener = { navigateToDetails(it) },
+        clickFavoriteListener = { viewModel.addMovieToUserList(it) }
+    )
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +44,16 @@ class AllMoviesFragment : BaseFragment<AllMoviesViewModel>() {
 
         viewModel.movies.observe(viewLifecycleOwner) {
             adapter.setItems(it)
+        }
+        viewModel.addToFavoriteFinished.observe(viewLifecycleOwner) {
+            if (it) {
+                val toast = Toast.makeText(
+                    requireContext(),
+                    R.string.toast_movie_added_to_favortie,
+                    Toast.LENGTH_SHORT
+                )
+                toast.show()
+            }
         }
         return binding.root
     }

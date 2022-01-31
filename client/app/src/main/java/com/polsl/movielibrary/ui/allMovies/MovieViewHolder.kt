@@ -8,9 +8,15 @@ import com.polsl.movielibrary.databinding.ListItemMovieBinding
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var movieBinding: ListItemMovieBinding? = null
 
-    fun onBind(modelListItem: MovieListItemModel) {
+    fun onBind(
+        modelListItem: MovieListItemModel,
+        clickFavoriteListener: (Int) -> Unit
+    ) {
         movieBinding?.let {
             it.movie = modelListItem
+            it.addToFavorite.setOnClickListener {
+                clickFavoriteListener(modelListItem.id)
+            }
         }
     }
 }

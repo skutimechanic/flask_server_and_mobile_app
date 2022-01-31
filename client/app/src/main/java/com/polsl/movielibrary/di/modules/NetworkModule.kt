@@ -19,19 +19,22 @@ val networkModule = module {
 
 private fun provideRetrofit(userSession: UserSession): Retrofit {
     return Retrofit.Builder()
-            .client(provideClient(userSession))
-            .baseUrl(BuildConfig.SERVER_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        .client(provideClient(userSession))
+        .baseUrl(BuildConfig.SERVER_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 }
 
-private fun provideClient(userSession: UserSession) = OkHttpClient.Builder().addInterceptor { chain ->
-    val newRequest: Request = chain.request().newBuilder()
+private fun provideClient(userSession: UserSession) =
+    OkHttpClient.Builder().addInterceptor { chain ->
+        val newRequest: Request = chain.request().newBuilder()
             .addHeader("Authorization", "Bearer ${userSession.getToken()}")
+            .addHeader("Connection", "close")
+            .addHeader("Cache-Control", "no-cache")
             .build()
-    chain.proceed(newRequest)
-}.build()
+        chain.proceed(newRequest)
+    }.build()
 
 
 private inline fun <reified T> provideService(retrofit: Retrofit): T =
-        retrofit.create(T::class.java)
+    retrofit.create(T::class.java)

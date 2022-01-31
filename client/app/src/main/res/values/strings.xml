@@ -22,4 +22,5 @@
     <string name="add_movie_button_label">Dodaj do mojej listy</string>
     <string name="update_rate">Zaktualizuj ocenę</string>
     <string name="rating_label">Średnia ocena: </string>
+    <string name="toast_movie_added_to_favortie">Film dodany do ulubionych!</string>
 </resources>
