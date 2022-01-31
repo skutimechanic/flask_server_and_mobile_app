@@ -30,7 +30,7 @@
                 android:background="@color/red"
                 android:clickable="true"
                 android:padding="20dp"
-                android:src="@drawable/ic_baseline_delete_24" />
+                android:src="@drawable/ic_baseline_delete_forever_24" />
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
