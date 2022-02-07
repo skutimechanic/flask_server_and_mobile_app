@@ -1,9 +1,51 @@
 # Aplikacja mobilna "Movies Search"
 
-## Część serwerowa aplikacji
+## Część serwerowa aplikacji 
 
+### Narzędzia konieczne do uruchomienia aplikacji
+- Python
+- Visual Studio Code (lub inne idea)
+- MySql Server
+- biblioteki zamieszczone w punkcie poniżej
 
+### Wirutalne środowisko
+Utworzenie wirtualnego środowiska: python -m venv venv
+Uruchomienie z konsoli wirtualnego środowiska: w folderze server odpalić konsole i wpisac komende venv\Scripts\activate.bat
+W wirtualnym środowisku zainstalować: 
+- pip install flask
+- pip install python-dotenv
+- pip install flask-sqlalchemy
+- pip install pymysql
+- pip install cryptography
+- pip install flask-migrate
+- pip install marshmallow
+- pip install webargs
+- pip install pyjwt
+Uruchomienie wirtualnego środowiska w vs code: https://stackoverflow.com/questions/54106071/how-can-i-set-up-a-virtual-environment-for-python-in-visual-studio-code
 
+### Instalacja i uruchomienie MySql
+MySql Community Server: https://dev.mysql.com/downloads/windows/installer/8.0.html, pobrać większy plik, w instalatorze wybrac "Developer defualt".
+Ręczne uruchomienie servera mysql jest mozliwe za pomocą cmd: services.msc, następnie z listy wybrać MySql80 i uruchom.
+W MySql 8.0 Command Line Client: "create database movie_library".
+
+### Konfiguracja serwera
+Dodać plik .env w folderze server o zawartości:
+SECRET_KEY=SomeRandomString
+SQLALCHEMY_DATABASE_URI=mysql+pymysql://<db_name>:<us_password>@localhost/movie_library?charset=utf8mb4
+
+### Pierwsze uruchomienie
+W folderze server będąc w wirtualnym środowisku, aby utworzyć tabele i nastepnie wypelnic je danymi:
+- flask db upgrade
+- flask db-manage add-data
+- flask run
+W celu usunięcia danych: flask db-manage remove-data
+
+### Kolejne uruchomienia
+W folderze server będąc w wirtualnym środowisku:
+- flask run
+
+### Dokumentacja endpointów
+Dokumentacja endpointów wygenerowana z aplikacji Postman, dostępna jest pod linkiem: https://documenter.getpostman.com/view/19180188/UVeJKQLo
 
 
 ## Aplikacja mobilna 
