@@ -37,7 +37,7 @@ Logowanie użytkownika:
 
 ![image](https://user-images.githubusercontent.com/73020115/152864858-7b1ee3a4-340e-4532-b041-2243b47fe7ec.png)
 
-Możliwość wylogowywani - 3. tab:
+Możliwość wylogowywania - 3. tab:
 
 ![image](https://user-images.githubusercontent.com/73020115/152865937-73fe9fb4-a575-486b-a6d7-70bf21b97b1a.png)
 
@@ -60,7 +60,7 @@ Analogicznie opcja usuwania filmów dostępna jest z poziomu listy filmów użyt
 
 Stan ocen i bazy filmów użytkownika jest na bieżąco aktualizowany przez część serwerową i prezentowany użytkownikowi w 2. tabie aplikacji.
 
-W systemie istnije również rola administratora, który ma możliwość globalnego usuwania filmów z systemu. Akcja ta jest możliwa do wykonania na szczegółach filmu po kliknięciu czerwonej ikony śmietnika: 
+W systemie istnije również rola administratora, który ma możliwość globalnego usuwania filmów z systemu. Akcja ta jest możliwa do wykonania na szczegółach filmu po kliknięciu czerwonej ikony kosza: 
 
 ![image](https://user-images.githubusercontent.com/73020115/152867005-44bc649c-21ae-4ef2-9f1e-c00c9e66bf00.png)
 
