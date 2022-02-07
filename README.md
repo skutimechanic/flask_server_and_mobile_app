@@ -10,7 +10,7 @@
 
 ### Wirutalne środowisko
 Utworzenie wirtualnego środowiska: python -m venv venv
-Uruchomienie z konsoli wirtualnego środowiska: w folderze server odpalić konsole i wpisac komende venv\Scripts\activate.bat
+Uruchomienie z konsoli wirtualnego środowiska: w folderze server odpalić konsole i wpisać komende venv\Scripts\activate.bat
 W wirtualnym środowisku zainstalować: 
 - pip install flask
 - pip install python-dotenv
@@ -24,8 +24,8 @@ W wirtualnym środowisku zainstalować:
 Uruchomienie wirtualnego środowiska w vs code: https://stackoverflow.com/questions/54106071/how-can-i-set-up-a-virtual-environment-for-python-in-visual-studio-code
 
 ### Instalacja i uruchomienie MySql
-MySql Community Server: https://dev.mysql.com/downloads/windows/installer/8.0.html, pobrać większy plik, w instalatorze wybrac "Developer defualt".
-Ręczne uruchomienie servera mysql jest mozliwe za pomocą cmd: services.msc, następnie z listy wybrać MySql80 i uruchom.
+MySql Community Server: https://dev.mysql.com/downloads/windows/installer/8.0.html, pobrać większy plik, w instalatorze wybrać "Developer defualt".
+Ręczne uruchomienie servera mysql jest możliwe za pomocą cmd: services.msc, następnie z listy wybrać MySql80 i uruchom.
 W MySql 8.0 Command Line Client: "create database movie_library".
 
 ### Konfiguracja serwera
@@ -34,7 +34,7 @@ SECRET_KEY=SomeRandomString
 SQLALCHEMY_DATABASE_URI=mysql+pymysql://<db_name>:<us_password>@localhost/movie_library?charset=utf8mb4
 
 ### Pierwsze uruchomienie
-W folderze server będąc w wirtualnym środowisku, aby utworzyć tabele i nastepnie wypelnic je danymi:
+W folderze server będąc w wirtualnym środowisku, aby utworzyć tabele i następnie wypelnić je danymi:
 - flask db upgrade
 - flask db-manage add-data
 - flask run
